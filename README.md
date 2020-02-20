@@ -14,7 +14,12 @@ cd partition-monitor
 cp .env.template .env
 ```
 
-**2. Running**
+**2. Configuring the Partition Monitor API**
+
+Modify `REACT_APP_API_URL key` in `.env` to a valid Partition Monitor API url <a href="https://github.com/linea-it/#" target="_blank">(see Partition Monitor API)</a>
+
+
+**3. Running**
 
 - If you're going to run in a development environment, use:
 ```shell
