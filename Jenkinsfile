@@ -10,24 +10,34 @@ pipeline {
   }
   agent any
   stages {
+
     stage('Creating version.json') {
       steps {
         sh './version.sh && cat ./src/assets/json/version.json'
       }
     }
-    stage('Building and pushing image') {
-      when {
-        allOf {
-          expression {
-            env.TAG_NAME == null
+      stage('Building and push image') {
+        when {
+          allOf {
+            expression {
+              env.TAG_NAME == null
+            }
+            expression {
+              env.BRANCH_NAME.toString().equals('master')
+            }
           }
-          expression {
-            env.BRANCH_NAME.toString().equals('master')
-          }
+        }
+      steps {
+        script {
+        sh 'docker build -t $registry:$GIT_COMMIT .'
+        docker.withRegistry( '', registryCredential ) {
+            sh 'docker push $registry:$GIT_COMMIT'
+            sh 'docker rmi $registry:$GIT_COMMIT'
+        }
         }
       }
     }
-    stage('Building and Pushing Image Release') {
+    stage('Building and Push Image Release') {
       when {
         expression {
           env.TAG_NAME != null
