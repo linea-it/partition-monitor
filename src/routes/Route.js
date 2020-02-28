@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import Drawer from '../components/Drawer';
+import Footer from '../components/Footer';
 
 export default function RouteWrapper({
   component: Component,
@@ -11,10 +12,9 @@ export default function RouteWrapper({
     <Route
       {...rest}
       render={(props) => (
-        <>
-          <Drawer />
+        <Drawer>
           <Component {...props} />
-        </>
+        </Drawer>
       )}
     />
   );

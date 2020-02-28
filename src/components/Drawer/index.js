@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
   Drawer as MuiDrawer,
@@ -22,16 +23,17 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Link } from 'react-router-dom';
 import styles from './styles';
 import logo from '../../assets/img/linea.png';
+import Footer from '../Footer';
 
-function Drawer() {
+function Drawer({ children }) {
   const [open, setOpen] = useState(false);
-  const classes = styles();
-  const [title, setTitle] = useState('Verifier');
+  const [title] = useState('Partition Monitor');
 
   const handleDrawerClick = () => setOpen(!open);
+  const classes = styles({ open });
 
   return (
-    <div className={classes.root}>
+    <div>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -64,26 +66,44 @@ function Drawer() {
             <ListItem button>
               <ListItemText
                 primary={(
-                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.logoBlock : '')}>
-                    <img src={logo} alt="TNO" className={clsx(open ? classes.iconHomeOpen : classes.iconHomeClose)} />
-                  </ListItemIcon>
+                  <>
+                    <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.logoBlock : '')}>
+                      <img src={logo} alt="Monitor" className={clsx(open ? classes.iconHomeOpen : classes.iconHomeClose)} />
+                    </ListItemIcon>
+                    <span className={clsx(classes.homeDrawer, open ? classes.titleBlock : '')}>
+                      Partition Monitor
+                    </span>
+                  </>
                   )}
                 className={clsx(classes.homeBtn, classes.textDrawer)}
               />
             </ListItem>
           </Link>
           <Divider className={classes.borderDrawer} />
-          <Link to="/dashboard" className={classes.invisibleLink} title="Grid">
-            <ListItem button className={open ? classes.nested : ''}>
+          <Link to="/history" className={classes.invisibleLink} title="History">
+            <ListItem button>
               <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
-                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-th')} />
+                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-history')} />
               </ListItemIcon>
               <ListItemText
-                primary="Grid"
+                primary="History"
                 className={classes.textDrawer}
               />
             </ListItem>
           </Link>
+          <Divider className={classes.borderDrawer} />
+          <Link to="/servers" className={classes.invisibleLink} title="Servers">
+            <ListItem button>
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-server')} />
+              </ListItemIcon>
+              <ListItemText
+                primary="Servers"
+                className={classes.textDrawer}
+              />
+            </ListItem>
+          </Link>
+          <Divider className={classes.borderDrawer} />
         </List>
         <div className={classes.drawerControlWrapper}>
           <IconButton
@@ -95,8 +115,17 @@ function Drawer() {
           </IconButton>
         </div>
       </MuiDrawer>
+      <main className={clsx(classes.childrenContainer, open ? classes.appBarDrawerOpen : classes.appBarDrawerClose)}>
+        {children}
+      </main>
+      <Footer open={open} />
     </div>
   );
 }
+
+Drawer.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
+    .isRequired,
+};
 
 export default Drawer;

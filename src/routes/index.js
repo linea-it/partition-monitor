@@ -1,13 +1,17 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Switch, Redirect } from 'react-router-dom';
 import Route from './Route';
-import Dashboard from '../pages/Dashboard';
+import History from '../pages/History';
+import Servers from '../pages/Servers';
 
 export default function Routes() {
   return (
     <Switch>
-      <Route path="/dashboard" component={Dashboard} />
-      {/* <Route path="/profile" component={Profile} /> */}
+      <Route path="/history" component={History} />
+      <Route path="/servers" component={Servers} />
+      <Route exact path="/">
+        <Redirect to="/history" />
+      </Route>
     </Switch>
   );
 }

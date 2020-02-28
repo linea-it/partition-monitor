@@ -1,12 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import { Typography, Toolbar } from '@material-ui/core';
+import clsx from 'clsx';
 import logo from '../../assets/img/linea-logo-mini.png';
 import gitVersion from '../../assets/json/version.json';
-import styles from './styles'
+import styles from './styles';
 
-function Footer() {
-  const classes = styles();
+function Footer({ open }) {
+  const classes = styles({ open });
 
   const openGithub = (vlink) => {
     if (vlink) {
@@ -36,7 +38,7 @@ function Footer() {
 
   return (
     <footer className={classes.root}>
-      <AppBar position="fixed" className={classes.drawer}>
+      <AppBar position="fixed" className={clsx(classes.drawer, open ? classes.appBarDrawerOpen : classes.appBarDrawerClose)}>
         <Toolbar className={classes.toolbar}>
           <Typography color="inherit" className={classes.grow}>
             {instance}
@@ -65,5 +67,9 @@ function Footer() {
     </footer>
   );
 }
+
+Footer.propTypes = {
+  open: PropTypes.bool.isRequired,
+};
 
 export default Footer;

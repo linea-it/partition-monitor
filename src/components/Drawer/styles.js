@@ -4,10 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 const drawerWidth = 240;
 
 const styles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    height: '100%',
-  },
   appBar: {
     backgroundColor: '#fff',
     boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2)',
@@ -43,7 +39,7 @@ const styles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
   },
   drawerOpen: {
-    background: '#454545',
+    background: theme.palette.primary.main,
     borderRight: 'none',
     width: drawerWidth,
     transition: theme.transitions.create('width', {
@@ -52,7 +48,7 @@ const styles = makeStyles((theme) => ({
     }),
   },
   drawerClose: {
-    background: '#454545',
+    background: theme.palette.primary.main,
     borderRight: 'none',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
@@ -100,7 +96,6 @@ const styles = makeStyles((theme) => ({
   invisibleLink: {
     color: 'black',
     textDecoration: 'none',
-    display: 'none,',
   },
   textDrawer: {
     color: 'white',
@@ -130,8 +125,8 @@ const styles = makeStyles((theme) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.32)',
   },
   iconHomeOpen: {
-    maxWidth: 140,
-    borderRadius: 140,
+    maxWidth: 65,
+    borderRadius: 65,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeInOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -139,7 +134,7 @@ const styles = makeStyles((theme) => ({
   },
   iconHomeClose: {
     maxWidth: 42,
-    marginLeft: -8,
+    marginLeft: -theme.spacing(1),
     borderRadius: 42,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeInOut,
@@ -152,7 +147,29 @@ const styles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
-}
-));
+  homeDrawer: {
+    fontWeight: 'bold',
+  },
+  titleBlock: {
+    display: 'block',
+  },
+  childrenContainer: {
+    padding: theme.spacing(3),
+  },
+  appBarDrawerOpen: {
+    marginLeft: 240,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  appBarDrawerClose: {
+    marginLeft: theme.spacing(7) - 1,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+}));
 
 export default styles;
