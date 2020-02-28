@@ -1,45 +1,14 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import { Typography, Toolbar } from '@material-ui/core';
-import logo from '../assets/img/linea-logo-mini.png';
-import gitVersion from '../assets/json/version.json';
+import clsx from 'clsx';
+import logo from '../../assets/img/linea-logo-mini.png';
+import gitVersion from '../../assets/json/version.json';
+import styles from './styles';
 
-function Footer() {
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      width: '100%',
-      float: 'right',
-      height: 64,
-    },
-    drawer: {
-      top: 'auto',
-      bottom: 0,
-      backgroundColor: '#596C7B',
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    grow: {
-      flexGrow: 1,
-    },
-    toolbar: {
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    versionLink: {
-      color: '#d2cf00',
-      textDecoration: 'none',
-      fontSize: '0.9rem',
-      cursor: 'pointer',
-    },
-    logoLink: {
-      lineHeight: 0,
-    },
-  }));
-
-  const classes = useStyles();
+function Footer({ open }) {
+  const classes = styles({ open });
 
   const openGithub = (vlink) => {
     if (vlink) {
@@ -69,7 +38,7 @@ function Footer() {
 
   return (
     <footer className={classes.root}>
-      <AppBar position="fixed" className={classes.drawer}>
+      <AppBar position="fixed" className={clsx(classes.drawer, open ? classes.appBarDrawerOpen : classes.appBarDrawerClose)}>
         <Toolbar className={classes.toolbar}>
           <Typography color="inherit" className={classes.grow}>
             {instance}
@@ -98,5 +67,9 @@ function Footer() {
     </footer>
   );
 }
+
+Footer.propTypes = {
+  open: PropTypes.bool.isRequired,
+};
 
 export default Footer;
