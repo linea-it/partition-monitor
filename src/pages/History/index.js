@@ -8,6 +8,7 @@ import {
 import Table from '../../components/Table';
 import styles from './styles';
 import { getHistory } from '../../services/api';
+import { megabytesToSize } from '../../services/math';
 
 function History() {
   const classes = styles();
@@ -37,6 +38,11 @@ function History() {
     {
       name: 'date',
       title: 'Date',
+      customElement: (row) => (
+        <span title={row.date.split(' ')[1]}>
+          {row.date.split(' ')[0]}
+        </span>
+      ),
     },
     {
       name: 'description',
@@ -57,14 +63,17 @@ function History() {
     {
       name: 'size',
       title: 'Size',
+      customElement: (row) => megabytesToSize(row.size),
     },
     {
       name: 'use',
       title: 'Use',
+      customElement: (row) => megabytesToSize(row.use),
     },
     {
       name: 'usepercent',
-      title: 'Usepercent',
+      title: '% Use',
+      align: 'center',
     },
   ];
 

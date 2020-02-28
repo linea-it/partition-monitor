@@ -4,10 +4,13 @@ import {
   Card,
   CardHeader,
   CardContent,
+  Icon,
 } from '@material-ui/core';
+import clsx from 'clsx';
 import Table from '../../components/Table';
 import styles from './styles';
 import { getHistory } from '../../services/api';
+import { megabytesToSize } from '../../services/math';
 
 function Servers() {
   const classes = styles();
@@ -34,6 +37,7 @@ function Servers() {
     }
   }, [history]);
 
+
   const columns = [
     {
       name: 'available',
@@ -42,6 +46,11 @@ function Servers() {
     {
       name: 'date',
       title: 'Date',
+      customElement: (row) => (
+        <span title={row.date.split(' ')[1]}>
+          {row.date.split(' ')[0]}
+        </span>
+      ),
     },
     {
       name: 'description',
@@ -55,33 +64,39 @@ function Servers() {
       name: 'mountpoint',
       title: 'Mountpoint',
     },
-    {
-      name: 'server',
-      title: 'Server',
-    },
+    // {
+    //   name: 'server',
+    //   title: 'Server',
+    // },
     {
       name: 'size',
       title: 'Size',
+      customElement: (row) => megabytesToSize(row.size),
     },
     {
       name: 'use',
       title: 'Use',
+      customElement: (row) => megabytesToSize(row.use),
     },
     {
       name: 'usepercent',
-      title: 'Usepercent',
+      title: '% Use',
+      align: 'center',
     },
   ];
 
   return (
     <Grid container spacing={3} justify="center" className={classes.root}>
       {servers.map((server) => (
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={12} sm={6}>
 
           <Card className={classes.card}>
             <CardHeader
               title={(
-                <span className={classes.headerTitle}>{server[0].server}</span>
+                <div className={classes.headerTitleWrapper}>
+                  <Icon className={clsx(classes.iconHeader, 'fa', 'fa-server')} />
+                  <span className={classes.headerTitle}>{server[0].server}</span>
+                </div>
               )}
               className={classes.cardHeader}
             />

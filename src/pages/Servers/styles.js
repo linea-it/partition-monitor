@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const styles = makeStyles({
+const styles = makeStyles((theme) => ({
   root: {
     marginTop: 64,
     flex: 'content',
@@ -19,6 +19,13 @@ const styles = makeStyles({
     fontSize: 14,
     fontWeight: 'bold',
   },
-});
+  iconHeader: {
+    marginRight: theme.spacing(1),
+  },
+  headerTitleWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+}));
 
 export default styles;
