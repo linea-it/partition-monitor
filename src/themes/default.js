@@ -27,6 +27,9 @@ const theme = createMuiTheme({
         paddingTop: 5,
         paddingBottom: 5,
       },
+      avatar: {
+        color: '#34465d',
+      },
       title: {
         color: '#34465d',
         fontSize: 16,

@@ -92,12 +92,8 @@ function Servers() {
 
           <Card className={classes.card}>
             <CardHeader
-              title={(
-                <div className={classes.headerTitleWrapper}>
-                  <Icon className={clsx(classes.iconHeader, 'fa', 'fa-server')} />
-                  <span className={classes.headerTitle}>{server[0].server}</span>
-                </div>
-              )}
+              avatar={<Icon className={clsx(classes.iconHeader, 'fa', 'fa-server')} />}
+              title={server[0].server}
               className={classes.cardHeader}
             />
             <CardContent>

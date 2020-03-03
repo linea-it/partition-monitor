@@ -16,9 +16,7 @@ function Footer({ open }) {
     }
   };
 
-  const instance = process.env.NODE_ENV === 'production'
-    ? window._env_.REACT_APP_INSTANCE // eslint-disable-line
-    : process.env.REACT_APP_INSTANCE;
+  const instance = process.env.REACT_APP_INSTANCE;
 
   let version = '--';
   let vlink = null;
