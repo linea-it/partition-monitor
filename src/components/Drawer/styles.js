@@ -155,6 +155,7 @@ const styles = makeStyles((theme) => ({
   },
   childrenContainer: {
     padding: theme.spacing(3),
+    marginTop: theme.spacing(8),
   },
   appBarDrawerOpen: {
     marginLeft: 240,

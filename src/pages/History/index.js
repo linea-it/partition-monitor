@@ -6,12 +6,10 @@ import {
   CardContent,
 } from '@material-ui/core';
 import Table from '../../components/Table';
-import styles from './styles';
 import { getHistory } from '../../services/api';
 import { megabytesToSize } from '../../services/math';
 
 function History() {
-  const classes = styles();
   const [history, setHistory] = useState([]);
   const [defaultExpandedGroups, setDefaultExpandedGroups] = useState([]);
 
@@ -78,15 +76,14 @@ function History() {
   ];
 
   return (
-    <Grid container spacing={3} justify="center" className={classes.root}>
+    <Grid container spacing={3} justify="center">
       <Grid item xs={12}>
         {defaultExpandedGroups.length > 0 ? (
-          <Card className={classes.card}>
+          <Card>
             <CardHeader
               title={(
-                <span className={classes.headerTitle}>History</span>
+                <span>History</span>
             )}
-              className={classes.cardHeader}
             />
             <CardContent>
               <Table
