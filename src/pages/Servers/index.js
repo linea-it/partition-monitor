@@ -6,14 +6,11 @@ import {
   CardContent,
   Icon,
 } from '@material-ui/core';
-import clsx from 'clsx';
 import Table from '../../components/Table';
-import styles from './styles';
 import { getHistory } from '../../services/api';
 import { megabytesToSize } from '../../services/math';
 
 function Servers() {
-  const classes = styles();
   const [history, setHistory] = useState([]);
   const [servers, setServers] = useState([]);
 
@@ -64,10 +61,6 @@ function Servers() {
       name: 'mountpoint',
       title: 'Mountpoint',
     },
-    // {
-    //   name: 'server',
-    //   title: 'Server',
-    // },
     {
       name: 'size',
       title: 'Size',
@@ -86,15 +79,14 @@ function Servers() {
   ];
 
   return (
-    <Grid container spacing={3} justify="center" className={classes.root}>
+    <Grid container spacing={3} justify="center">
       {servers.map((server) => (
         <Grid item xs={12} sm={6}>
 
-          <Card className={classes.card}>
+          <Card>
             <CardHeader
-              avatar={<Icon className={clsx(classes.iconHeader, 'fa', 'fa-server')} />}
+              avatar={<Icon className="fa fa-server" />}
               title={server[0].server}
-              className={classes.cardHeader}
             />
             <CardContent>
               <Table

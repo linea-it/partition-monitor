@@ -127,7 +127,7 @@ function Table({
         sorting, pageSize, currentPage, after, filter, searchValue,
       });
     }
-  }, [sorting, currentPage, currentPage, reload, pageSize, filter, searchValue]);
+  }, [sorting, currentPage, reload, pageSize, filter, searchValue]); // eslint-disable-line
 
   const clearData = () => {
     setCustomData([]);
