@@ -4,20 +4,51 @@ import {
   Card,
   CardHeader,
   CardContent,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from '@material-ui/core';
-import Plot from 'react-plotly.js';
+import moment from 'moment';
+import { useParams } from 'react-router-dom';
+import Plot from '../../components/Plot';
 import Table from '../../components/Table';
-import { getHistoryByServer } from '../../services/api';
+import { getHistoryByServer, getSizeByServerAndPeriod } from '../../services/api';
 import { megabytesToSize } from '../../services/math';
 
-function DESDB4() {
+function Server() {
   const [history, setHistory] = useState([]);
   const [defaultExpandedGroups, setDefaultExpandedGroups] = useState([]);
+  const [period, setPeriod] = useState(6);
+  const [plotData, setPlotData] = useState({ x: [], y: [] });
+  const { server } = useParams();
 
   useEffect(() => {
-    getHistoryByServer('desdb4')
+    getHistoryByServer(server)
       .then((res) => setHistory(res));
-  }, []);
+  }, [server]);
+
+  useEffect(() => {
+    let startDate = moment();
+
+    if (period === 0) {
+      startDate = startDate.subtract(7, 'days').format('DD-MM-YYYY');
+    } else {
+      startDate = startDate.subtract(period, 'months').format('DD-MM-YYYY');
+    }
+
+    const endDate = moment().format('DD-MM-YYYY');
+
+    getSizeByServerAndPeriod({ server, startDate, endDate })
+      .then((res) => {
+        if (res.length > 0) {
+          setPlotData({
+            x: res.map((row) => row.date),
+            y: res.map((row) => row.size),
+          });
+        }
+      });
+  }, [period]);
 
   useEffect(() => {
     if (history.length > 0) {
@@ -76,17 +107,35 @@ function DESDB4() {
     },
   ];
 
+  const handlePeriodChange = (e) => setPeriod(Number(e.target.value));
+
   return (
     <Grid container spacing={3} justify="center">
       <Grid item xs={12}>
-        <Plot />
+        <FormControl>
+          <InputLabel>Period</InputLabel>
+          <Select
+            value={period}
+            onChange={handlePeriodChange}
+
+          >
+            <MenuItem value={0}>Last Week</MenuItem>
+            <MenuItem value={1}>Last Month</MenuItem>
+            <MenuItem value={6}>Last Six Months</MenuItem>
+            <MenuItem value={12}>Last Year</MenuItem>
+            <MenuItem value={24}>Last Two Years</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12}>
+        <Plot data={[{ ...plotData, type: 'bar' }]} />
       </Grid>
       <Grid item xs={12}>
         {defaultExpandedGroups.length > 0 ? (
           <Card>
             <CardHeader
               title={(
-                <span>DESDB4</span>
+                <span>{server}</span>
             )}
             />
             <CardContent>
@@ -105,4 +154,4 @@ function DESDB4() {
   );
 }
 
-export default DESDB4;
+export default Server;

@@ -124,7 +124,7 @@ function Drawer({ children }) {
           </ListItem>
           <Collapse in={drawerTree.database} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <Link to="/database/desdb4" className={classes.invisibleLink} title="DESDB4">
+              <Link to="/desdb4" className={classes.invisibleLink} title="DESDB4">
                 <ListItem button className={open ? classes.nested : ''}>
                   <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
                     <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-database')} />
@@ -135,7 +135,7 @@ function Drawer({ children }) {
                   />
                 </ListItem>
               </Link>
-              <Link to="/database/desdb6" className={classes.invisibleLink} title="DESDB6">
+              <Link to="/desdb6" className={classes.invisibleLink} title="DESDB6">
                 <ListItem button className={open ? classes.nested : ''}>
                   <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
                     <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-database')} />
@@ -215,6 +215,7 @@ function Drawer({ children }) {
         </div>
       </MuiDrawer>
       <main
+        id="main"
         className={clsx(
           classes.childrenContainer,
           open ? classes.appBarDrawerOpen : classes.appBarDrawerClose,
