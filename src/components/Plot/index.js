@@ -2,11 +2,9 @@ import React from 'react';
 import Plotly from 'react-plotly.js';
 import PropTypes from 'prop-types';
 
-
 function Plot({ data, width }) {
   return (
     <Plotly
-      className="plot-size-by-period"
       data={data}
       layout={{
         width,
