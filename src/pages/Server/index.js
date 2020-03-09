@@ -11,68 +11,24 @@ import {
 } from '@material-ui/core';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
+import { withSize } from 'react-sizeme';
+import PropTypes from 'prop-types';
 import Plot from '../../components/Plot';
 import Table from '../../components/Table';
-import { getHistoryByServer, getSizeByServerAndPeriod } from '../../services/api';
+import { getPartitionsByServer, getSizeByServerAndPartitionAndPeriod } from '../../services/api';
 import { megabytesToSize } from '../../services/math';
 
-function Server() {
-  const [history, setHistory] = useState([]);
-  const [defaultExpandedGroups, setDefaultExpandedGroups] = useState([]);
+function Server({ setTitle, size }) {
   const [period, setPeriod] = useState(6);
   const [plotData, setPlotData] = useState({ x: [], y: [] });
+  const [partitions, setPartitions] = useState([]);
+  const [selectedPartition, setSelectedPartition] = useState('');
   const { server } = useParams();
-
-  useEffect(() => {
-    getHistoryByServer(server)
-      .then((res) => setHistory(res));
-  }, [server]);
-
-  useEffect(() => {
-    let startDate = moment();
-
-    if (period === 0) {
-      startDate = startDate.subtract(7, 'days').format('DD-MM-YYYY');
-    } else {
-      startDate = startDate.subtract(period, 'months').format('DD-MM-YYYY');
-    }
-
-    const endDate = moment().format('DD-MM-YYYY');
-
-    getSizeByServerAndPeriod({ server, startDate, endDate })
-      .then((res) => {
-        if (res.length > 0) {
-          setPlotData({
-            x: res.map((row) => row.date),
-            y: res.map((row) => row.size),
-          });
-        }
-      });
-  }, [period]);
-
-  useEffect(() => {
-    if (history.length > 0) {
-      const keys = history
-        .map((obj) => obj.server)
-        .filter((el, i, arr) => arr.indexOf(el) === i);
-
-      setDefaultExpandedGroups(keys);
-    }
-  }, [history]);
 
   const columns = [
     {
       name: 'available',
       title: 'Available',
-    },
-    {
-      name: 'date',
-      title: 'Date',
-      customElement: (row) => (
-        <span title={row.date.split(' ')[1]}>
-          {row.date.split(' ')[0]}
-        </span>
-      ),
     },
     {
       name: 'description',
@@ -107,11 +63,74 @@ function Server() {
     },
   ];
 
+  useEffect(() => {
+    setTitle(server);
+    setPartitions([]);
+  }, [server, setTitle]);
+
+
+  useEffect(() => {
+    // If is the first page load or if the route was changed through the drawer:
+    if (partitions.length === 0 ) {
+      getPartitionsByServer(server)
+        .then((res) => {
+          setSelectedPartition(res[0].mountpoint);
+          setPartitions(res);
+        });
+    }
+  }, [server, partitions]);
+
+
+  useEffect(() => {
+    let startDate = moment();
+
+    if (period === 0) {
+      startDate = startDate.subtract(7, 'days').format('YYYY-MM-DD');
+    } else {
+      startDate = startDate.subtract(period, 'months').format('YYYY-MM-DD');
+    }
+
+    const endDate = moment().format('YYYY-MM-DD');
+
+    getSizeByServerAndPartitionAndPeriod({
+      server, partition: selectedPartition, startDate, endDate,
+    })
+      .then((res) => {
+        if (res.length > 0) {
+          setPlotData({
+            x: res.map((row) => row.date),
+            y: res.map((row) => row.size),
+          });
+        }
+      });
+  }, [server, selectedPartition, period]);
+
   const handlePeriodChange = (e) => setPeriod(Number(e.target.value));
 
+  const handlePartitionChange = (e) => setSelectedPartition(e.target.value);
+
   return (
-    <Grid container spacing={3} justify="center">
-      <Grid item xs={12}>
+    <Grid container spacing={3}>
+      <Grid item>
+        <FormControl>
+          <InputLabel>Partition</InputLabel>
+          <Select
+            value={selectedPartition}
+            onChange={handlePartitionChange}
+
+          >
+            {partitions.map((partition) => (
+              <MenuItem
+                key={partition.mountpoint}
+                value={partition.mountpoint}
+              >
+                {partition.mountpoint}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item>
         <FormControl>
           <InputLabel>Period</InputLabel>
           <Select
@@ -128,30 +147,44 @@ function Server() {
         </FormControl>
       </Grid>
       <Grid item xs={12}>
-        <Plot data={[{ ...plotData, type: 'bar' }]} />
+        <Plot data={[{ ...plotData, type: 'bar' }]} width={size.width} />
       </Grid>
       <Grid item xs={12}>
-        {defaultExpandedGroups.length > 0 ? (
-          <Card>
-            <CardHeader
-              title={(
-                <span>{server}</span>
+        <Card>
+          <CardHeader
+            title={(
+              <span>
+                {server}
+                {' '}
+                -
+                {' '}
+                {selectedPartition}
+              </span>
             )}
+          />
+          <CardContent>
+            <Table
+              columns={columns}
+              data={partitions.filter((partition) => partition.mountpoint === selectedPartition)}
+              loadData={() => selectedPartition}
+              totalCount={1}
+              remote={false}
+              hasSearching={false}
+              hasSorting={false}
             />
-            <CardContent>
-              <Table
-                columns={columns}
-                data={history}
-                totalCount={history.length}
-                hasSearching={false}
-                remote={false}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
+          </CardContent>
+        </Card>
       </Grid>
     </Grid>
   );
 }
 
-export default Server;
+Server.propTypes = {
+  size: PropTypes.shape({
+    width: PropTypes.number,
+    height: PropTypes.number,
+  }).isRequired,
+  setTitle: PropTypes.func.isRequired,
+};
+
+export default withSize()(Server);

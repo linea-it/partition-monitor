@@ -1,22 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Plotly from 'react-plotly.js';
 import PropTypes from 'prop-types';
-// import useWindowSize from '../../hooks/useWindowSize';
 
 
-function Plot({ data }) {
-  const [plotWidth, setPlotWidth] = useState(0);
-  // const windowSize = useWindowSize();
-
-  // useEffect(() => {
-  //   setPlotWidth(windowSize.width);
-  // }, [windowSize]);
-
+function Plot({ data, width }) {
   return (
     <Plotly
+      className="plot-size-by-period"
       data={data}
       layout={{
-        width: plotWidth,
+        width,
+        height: 'auto',
         title: 'Size per period',
         xaxis: {
           title: 'Date',
@@ -42,7 +36,8 @@ function Plot({ data }) {
 
 
 Plot.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.objects).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  width: PropTypes.number.isRequired,
 };
 
 export default Plot;

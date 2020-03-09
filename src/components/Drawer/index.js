@@ -28,13 +28,11 @@ import styles from './styles';
 import logo from '../../assets/img/linea.png';
 import Footer from '../Footer';
 
-function Drawer({ children }) {
-  const title = 'Partition Monitor';
-  const [open, setOpen] = useState(false);
+function Drawer({ title, children }) {
+  const [open, setOpen] = useState(true);
   const [drawerTree, setDrawerTree] = useState({
     database: true,
-    archive: true,
-    eups: true,
+    fileserver: true,
   });
 
   const handleDrawerClick = () => setOpen(!open);
@@ -95,6 +93,82 @@ function Drawer({ children }) {
             </ListItem>
           </Link>
           <Divider className={classes.borderDrawer} />
+          <ListItem button onClick={() => handleDrawerTreeClick('fileserver')}>
+            {open ? (
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+              </ListItemIcon>
+            ) : (
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                {drawerTree.fileserver ? (
+                  <ExpandLess className={classes.expandClosed} />
+                ) : (
+                  <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                )}
+              </ListItemIcon>
+            )}
+            <ListItemText
+              primary="Fileserver"
+              title="Fileserver"
+              className={classes.textDrawer}
+            />
+            {open ? (
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')} title="Fileserver">
+                {drawerTree.fileserver
+                  ? <ExpandLess className={classes.iconDrawer} />
+                  : <ExpandMore className={classes.iconDrawer} />}
+              </ListItemIcon>
+            ) : null}
+          </ListItem>
+          <Collapse in={drawerTree.fileserver} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <Link to="/ms01" className={classes.invisibleLink} title="MS01">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="MS01"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+              <Link to="/ms04" className={classes.invisibleLink} title="MS04">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="MS04"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+              <Link to="/Ferocks" className={classes.invisibleLink} title="Ferocks">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Ferocks"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+              <Link to="/Lustre" className={classes.invisibleLink} title="Lustre">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Lustre"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+            </List>
+          </Collapse>
+          <Divider className={classes.borderDrawer} />
           <ListItem button onClick={() => handleDrawerTreeClick('database')}>
             {open ? (
               <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
@@ -149,60 +223,6 @@ function Drawer({ children }) {
             </List>
           </Collapse>
           <Divider className={classes.borderDrawer} />
-          <ListItem button onClick={() => handleDrawerTreeClick('archive')}>
-            {open ? (
-              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
-                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
-              </ListItemIcon>
-            ) : (
-              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
-                {drawerTree.archive ? (
-                  <ExpandLess className={classes.expandClosed} />
-                ) : (
-                  <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
-                )}
-              </ListItemIcon>
-            )}
-            <ListItemText
-              primary="Archive"
-              title="Archive"
-              className={classes.textDrawer}
-            />
-            {open ? (
-              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')} title="Archive">
-                {drawerTree.archive
-                  ? <ExpandLess className={classes.iconDrawer} />
-                  : <ExpandMore className={classes.iconDrawer} />}
-              </ListItemIcon>
-            ) : null}
-          </ListItem>
-          <Collapse in={drawerTree.archive} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <Link to="/ms01" className={classes.invisibleLink} title="MS01">
-                <ListItem button className={open ? classes.nested : ''}>
-                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
-                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="MS01"
-                    className={classes.textDrawer}
-                  />
-                </ListItem>
-              </Link>
-              <Link to="/ms04" className={classes.invisibleLink} title="MS04">
-                <ListItem button className={open ? classes.nested : ''}>
-                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
-                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="MS04"
-                    className={classes.textDrawer}
-                  />
-                </ListItem>
-              </Link>
-            </List>
-          </Collapse>
-          <Divider className={classes.borderDrawer} />
         </List>
         <div className={classes.drawerControlWrapper}>
           <IconButton
@@ -229,6 +249,7 @@ function Drawer({ children }) {
 }
 
 Drawer.propTypes = {
+  title: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
     .isRequired,
 };

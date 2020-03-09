@@ -1,21 +1,16 @@
 import React from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 import Route from './Route';
-// import History from '../pages/History';
-// import Servers from '../pages/Servers';
 import Server from '../pages/Server';
 
 export default function Routes() {
   return (
     <Switch>
-      {/* <Route path="/history" component={History} />
-      <Route path="/servers" component={Servers} /> */}
-
       <Route path="/:server" component={Server} />
 
-      {/* <Route exact path="/">
+      <Route exact path="/">
         <Redirect to="/desdb4" />
-      </Route> */}
+      </Route>
     </Switch>
   );
 }
