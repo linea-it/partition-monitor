@@ -14,10 +14,13 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+  Collapse,
 } from '@material-ui/core';
 import {
   ChevronLeft,
   ChevronRight,
+  ExpandLess,
+  ExpandMore,
 } from '@material-ui/icons';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Link } from 'react-router-dom';
@@ -25,12 +28,22 @@ import styles from './styles';
 import logo from '../../assets/img/linea.png';
 import Footer from '../Footer';
 
-function Drawer({ children }) {
-  const [open, setOpen] = useState(false);
-  const [title] = useState('Partition Monitor');
+function Drawer({ title, children }) {
+  const [open, setOpen] = useState(true);
+  const [drawerTree, setDrawerTree] = useState({
+    database: true,
+    fileserver: true,
+  });
 
   const handleDrawerClick = () => setOpen(!open);
-  const classes = styles({ open });
+
+  const handleDrawerTreeClick = (element) => setDrawerTree({
+    ...drawerTree,
+    [element]: !drawerTree[element],
+  });
+
+  const classes = styles();
+
 
   return (
     <div>
@@ -62,7 +75,7 @@ function Drawer({ children }) {
         open={open}
       >
         <List className={classes.drawerList}>
-          <Link to="/dashboard" className={classes.invisibleLink} title="Laboratório Interinstitucional de e-Astronomia">
+          <Link to="/" className={classes.invisibleLink} title="Laboratório Interinstitucional de e-Astronomia">
             <ListItem button>
               <ListItemText
                 primary={(
@@ -80,29 +93,135 @@ function Drawer({ children }) {
             </ListItem>
           </Link>
           <Divider className={classes.borderDrawer} />
-          <Link to="/history" className={classes.invisibleLink} title="History">
-            <ListItem button>
+          <ListItem button onClick={() => handleDrawerTreeClick('fileserver')}>
+            {open ? (
               <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
-                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-history')} />
+                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
               </ListItemIcon>
-              <ListItemText
-                primary="History"
-                className={classes.textDrawer}
-              />
-            </ListItem>
-          </Link>
+            ) : (
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                {drawerTree.fileserver ? (
+                  <ExpandLess className={classes.expandClosed} />
+                ) : (
+                  <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                )}
+              </ListItemIcon>
+            )}
+            <ListItemText
+              primary="Fileserver"
+              title="Fileserver"
+              className={classes.textDrawer}
+            />
+            {open ? (
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')} title="Fileserver">
+                {drawerTree.fileserver
+                  ? <ExpandLess className={classes.iconDrawer} />
+                  : <ExpandMore className={classes.iconDrawer} />}
+              </ListItemIcon>
+            ) : null}
+          </ListItem>
+          <Collapse in={drawerTree.fileserver} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <Link to="/ms01" className={classes.invisibleLink} title="MS01">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="MS01"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+              <Link to="/ms04" className={classes.invisibleLink} title="MS04">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="MS04"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+              <Link to="/Ferocks" className={classes.invisibleLink} title="Ferocks">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Ferocks"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+              <Link to="/Lustre" className={classes.invisibleLink} title="Lustre">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Lustre"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+            </List>
+          </Collapse>
           <Divider className={classes.borderDrawer} />
-          <Link to="/servers" className={classes.invisibleLink} title="Servers">
-            <ListItem button>
+          <ListItem button onClick={() => handleDrawerTreeClick('database')}>
+            {open ? (
               <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
-                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-server')} />
+                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-database')} />
               </ListItemIcon>
-              <ListItemText
-                primary="Servers"
-                className={classes.textDrawer}
-              />
-            </ListItem>
-          </Link>
+            ) : (
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                {drawerTree.database ? (
+                  <ExpandLess className={classes.expandClosed} />
+                ) : (
+                  <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-database')} />
+                )}
+              </ListItemIcon>
+            )}
+            <ListItemText
+              primary="Database"
+              title="Database"
+              className={classes.textDrawer}
+            />
+            {open ? (
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')} title="Database">
+                {drawerTree.database
+                  ? <ExpandLess className={classes.iconDrawer} />
+                  : <ExpandMore className={classes.iconDrawer} />}
+              </ListItemIcon>
+            ) : null}
+          </ListItem>
+          <Collapse in={drawerTree.database} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <Link to="/desdb4" className={classes.invisibleLink} title="DESDB4">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-database')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="DESDB4"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+              <Link to="/desdb6" className={classes.invisibleLink} title="DESDB6">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-database')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="DESDB6"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+            </List>
+          </Collapse>
           <Divider className={classes.borderDrawer} />
         </List>
         <div className={classes.drawerControlWrapper}>
@@ -115,7 +234,13 @@ function Drawer({ children }) {
           </IconButton>
         </div>
       </MuiDrawer>
-      <main className={clsx(classes.childrenContainer, open ? classes.appBarDrawerOpen : classes.appBarDrawerClose)}>
+      <main
+        id="main"
+        className={clsx(
+          classes.childrenContainer,
+          open ? classes.appBarDrawerOpen : classes.appBarDrawerClose,
+        )}
+      >
         {children}
       </main>
       <Footer open={open} />
@@ -124,6 +249,7 @@ function Drawer({ children }) {
 }
 
 Drawer.propTypes = {
+  title: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
     .isRequired,
 };

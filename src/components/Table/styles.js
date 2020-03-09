@@ -18,7 +18,7 @@ const styles = makeStyles({
   noDataWrapper: {
     left: '50%',
     display: 'inline-block',
-    position: 'sticky',
+    // position: 'sticky',
   },
   noDataText: {
     display: 'inline-block',

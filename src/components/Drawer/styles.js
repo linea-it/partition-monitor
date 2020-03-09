@@ -114,7 +114,7 @@ const styles = makeStyles((theme) => ({
   },
   iconDrawer: {
     width: 'auto',
-    fontSize: '1.2rem',
+    fontSize: '1.2em',
   },
   expandClosed: {
     width: 'auto',
