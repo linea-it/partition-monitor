@@ -83,23 +83,24 @@ function Server({ setTitle, size }) {
 
   useEffect(() => {
     let startDate = moment();
+    const endDate = moment().format('YYYY-MM-DD');
 
-    if (period === 0) {
+    if(period === 0) {
+      startDate = endDate;
+    } else if (period === 0.25) {
       startDate = startDate.subtract(7, 'days').format('YYYY-MM-DD');
     } else {
       startDate = startDate.subtract(period, 'months').format('YYYY-MM-DD');
     }
 
-    const endDate = moment().format('YYYY-MM-DD');
-
     getSizeByServerAndPartitionAndPeriod({
       server, partition: selectedPartition, startDate, endDate,
     })
       .then((res) => {
-        if (res.length > 0) {
+        if (res.data.length > 0) {
           setPlotData({
-            x: res.map((row) => row.date),
-            y: res.map((row) => row.size),
+            x: res.data.map((row) => row.date),
+            y: res.data.map((row) => row.use),
           });
         }
       });
@@ -138,7 +139,8 @@ function Server({ setTitle, size }) {
             onChange={handlePeriodChange}
 
           >
-            <MenuItem value={0}>Last Week</MenuItem>
+            <MenuItem value={0}>Today</MenuItem>
+            <MenuItem value={0.25}>Last Week</MenuItem>
             <MenuItem value={1}>Last Month</MenuItem>
             <MenuItem value={6}>Last Six Months</MenuItem>
             <MenuItem value={12}>Last Year</MenuItem>
@@ -166,7 +168,6 @@ function Server({ setTitle, size }) {
             <Table
               columns={columns}
               data={partitions.filter((partition) => partition.mountpoint === selectedPartition)}
-              loadData={() => selectedPartition}
               totalCount={1}
               remote={false}
               hasSearching={false}
