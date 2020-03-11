@@ -27,6 +27,11 @@ export const getHistoryByServer = ({ server, offset, limit }) =>
   axios.get(`/history?server__eq=${server}&offset=${offset}&limit=${limit}`)
     .then(res => res.data);
 
-export const getSizeByServerAndPartitionAndPeriod = ({ server, partition, startDate, endDate }) =>
-  axios.get(`/history?server__eq=${server}&mountpoint__contains=${partition}&date__range=${startDate},${endDate}&cols=date,use`)
+export const getSizeByServerAndPartitionAndPeriod = ({ server, partition, startDate, endDate, isToday }) => {
+  if(isToday) {
+    return axios.get(`/history?server__eq=${server}&mountpoint__contains=${partition}&date__contains=${endDate}&cols=date,use`)
     .then(res => res.data)
+  }
+  return axios.get(`/history?server__eq=${server}&mountpoint__contains=${partition}&date__range=${startDate},${endDate}&cols=date,use`)
+    .then(res => res.data)
+}

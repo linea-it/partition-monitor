@@ -68,6 +68,10 @@ function Server({ setTitle, size }) {
     setPartitions([]);
   }, [server, setTitle]);
 
+  useEffect(() => {
+    console.log(period)
+  }, [period])
+
 
   useEffect(() => {
     // If is the first page load or if the route was changed through the drawer:
@@ -84,9 +88,10 @@ function Server({ setTitle, size }) {
   useEffect(() => {
     let startDate = moment();
     const endDate = moment().format('YYYY-MM-DD');
+    let isToday = false;
 
     if(period === 0) {
-      startDate = endDate;
+      isToday = true;
     } else if (period === 0.25) {
       startDate = startDate.subtract(7, 'days').format('YYYY-MM-DD');
     } else {
@@ -94,7 +99,7 @@ function Server({ setTitle, size }) {
     }
 
     getSizeByServerAndPartitionAndPeriod({
-      server, partition: selectedPartition, startDate, endDate,
+      server, partition: selectedPartition, startDate, endDate, isToday
     })
       .then((res) => {
         if (res.data.length > 0) {
