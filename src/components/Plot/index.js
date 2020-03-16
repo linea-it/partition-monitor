@@ -10,15 +10,18 @@ function Plot({ data, width }) {
         width,
         height: 'auto',
         title: 'Size per period',
+        barmode: 'group',
         xaxis: {
           title: 'Date',
           automargin: true,
           autorange: true,
+          type: 'date',
         },
         yaxis: {
-          title: 'Size (MB)',
+          title: 'Size',
           automargin: true,
           autorange: true,
+          ticksuffix: 'TB',
         },
         hovermode: 'closest',
         autosize: true,
@@ -31,7 +34,6 @@ function Plot({ data, width }) {
     />
   );
 }
-
 
 Plot.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,

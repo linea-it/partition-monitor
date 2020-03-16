@@ -15,7 +15,10 @@ import { withSize } from 'react-sizeme';
 import PropTypes from 'prop-types';
 import Plot from '../../components/Plot';
 import Table from '../../components/Table';
-import { getPartitionsByServer, getSizeByServerAndPartitionAndPeriod } from '../../services/api';
+import {
+  getPartitionsByServer,
+  getSizeByServerAndPartitionAndPeriod,
+} from '../../services/api';
 import { megabytesToSize } from '../../services/math';
 
 function Server({ setTitle, size }) {
@@ -29,6 +32,7 @@ function Server({ setTitle, size }) {
     {
       name: 'available',
       title: 'Available',
+      customElement: row => megabytesToSize(row.available),
     },
     {
       name: 'description',
@@ -49,12 +53,12 @@ function Server({ setTitle, size }) {
     {
       name: 'size',
       title: 'Size',
-      customElement: (row) => megabytesToSize(row.size),
+      customElement: row => megabytesToSize(row.size),
     },
     {
       name: 'use',
       title: 'Use',
-      customElement: (row) => megabytesToSize(row.use),
+      customElement: row => megabytesToSize(row.use),
     },
     {
       name: 'usepercent',
@@ -69,28 +73,25 @@ function Server({ setTitle, size }) {
   }, [server, setTitle]);
 
   useEffect(() => {
-    console.log(period)
-  }, [period])
-
+    console.log(period);
+  }, [period]);
 
   useEffect(() => {
     // If is the first page load or if the route was changed through the drawer:
-    if (partitions.length === 0 ) {
-      getPartitionsByServer(server)
-        .then((res) => {
-          setSelectedPartition(res[0].mountpoint);
-          setPartitions(res);
-        });
+    if (partitions.length === 0) {
+      getPartitionsByServer(server).then(res => {
+        setSelectedPartition(res[0].mountpoint);
+        setPartitions(res);
+      });
     }
   }, [server, partitions]);
-
 
   useEffect(() => {
     let startDate = moment();
     const endDate = moment().format('YYYY-MM-DD');
     let isToday = false;
 
-    if(period === 0) {
+    if (period === 0) {
       isToday = true;
     } else if (period === 0.25) {
       startDate = startDate.subtract(7, 'days').format('YYYY-MM-DD');
@@ -99,37 +100,59 @@ function Server({ setTitle, size }) {
     }
 
     getSizeByServerAndPartitionAndPeriod({
-      server, partition: selectedPartition, startDate, endDate, isToday
-    })
-      .then((res) => {
-        if (res.data.length > 0) {
-          setPlotData({
-            x: res.data.map((row) => row.date),
-            y: res.data.map((row) => row.use),
-          });
-        }
-      });
+      server,
+      partition: selectedPartition,
+      startDate,
+      endDate,
+      isToday,
+    }).then(res => {
+      if (res.data.length > 0) {
+        const xAxis = [];
+        const yAxis = [];
+        const yStackAxis = [];
+
+        res.data.forEach(row => {
+          xAxis.push(row.date);
+          yAxis.push(row.use / 1000000);
+          yStackAxis.push((row.available + row.use) / 1000000);
+        });
+
+        setPlotData([
+          {
+            x: xAxis,
+            y: yAxis,
+            type: 'scatter',
+            mode: 'lines',
+            line: {
+              color: '#17BECF',
+            },
+          },
+          // {
+          //   x: xAxis,
+          //   y: yStackAxis,
+          //   type: 'scatter',
+          // },
+        ]);
+      }
+    });
   }, [server, selectedPartition, period]);
 
-  const handlePeriodChange = (e) => setPeriod(Number(e.target.value));
+  useEffect(() => {
+    console.log('plotData', plotData);
+  }, [plotData]);
 
-  const handlePartitionChange = (e) => setSelectedPartition(e.target.value);
+  const handlePeriodChange = e => setPeriod(Number(e.target.value));
+
+  const handlePartitionChange = e => setSelectedPartition(e.target.value);
 
   return (
     <Grid container spacing={3}>
       <Grid item>
         <FormControl>
           <InputLabel>Partition</InputLabel>
-          <Select
-            value={selectedPartition}
-            onChange={handlePartitionChange}
-
-          >
-            {partitions.map((partition) => (
-              <MenuItem
-                key={partition.mountpoint}
-                value={partition.mountpoint}
-              >
+          <Select value={selectedPartition} onChange={handlePartitionChange}>
+            {partitions.map(partition => (
+              <MenuItem key={partition.mountpoint} value={partition.mountpoint}>
                 {partition.mountpoint}
               </MenuItem>
             ))}
@@ -139,11 +162,7 @@ function Server({ setTitle, size }) {
       <Grid item>
         <FormControl>
           <InputLabel>Period</InputLabel>
-          <Select
-            value={period}
-            onChange={handlePeriodChange}
-
-          >
+          <Select value={period} onChange={handlePeriodChange}>
             <MenuItem value={0}>Today</MenuItem>
             <MenuItem value={0.25}>Last Week</MenuItem>
             <MenuItem value={1}>Last Month</MenuItem>
@@ -154,25 +173,23 @@ function Server({ setTitle, size }) {
         </FormControl>
       </Grid>
       <Grid item xs={12}>
-        <Plot data={[{ ...plotData, type: 'bar' }]} width={size.width} />
+        <Plot data={plotData} width={size.width} />
       </Grid>
       <Grid item xs={12}>
         <Card>
           <CardHeader
-            title={(
+            title={
               <span>
-                {server}
-                {' '}
-                -
-                {' '}
-                {selectedPartition}
+                {server} - {selectedPartition}
               </span>
-            )}
+            }
           />
           <CardContent>
             <Table
               columns={columns}
-              data={partitions.filter((partition) => partition.mountpoint === selectedPartition)}
+              data={partitions.filter(
+                partition => partition.mountpoint === selectedPartition
+              )}
               totalCount={1}
               remote={false}
               hasSearching={false}
