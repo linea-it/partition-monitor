@@ -105,7 +105,6 @@ function Server({ setTitle, size }) {
       if (res.data.length > 0) {
         const xAxis = [];
         const yAxis = [];
-        const yStackAxis = [];
 
         res.data.forEach(row => {
           xAxis.push(row.date);
