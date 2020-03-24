@@ -5,20 +5,27 @@ import PropTypes from 'prop-types';
 function Plot({ data, width }) {
   return (
     <Plotly
-      data={data}
+      data={[{
+        ...data,
+        type: 'scatter',
+        mode: 'lines',
+      }]}
       layout={{
         width,
         height: 'auto',
         title: 'Size per period',
+        barmode: 'group',
         xaxis: {
           title: 'Date',
           automargin: true,
           autorange: true,
+          type: 'date',
         },
         yaxis: {
-          title: 'Size (MB)',
+          title: 'Size (TB)',
           automargin: true,
           autorange: true,
+          ticksuffix: 'TB',
         },
         hovermode: 'closest',
         autosize: true,
@@ -32,9 +39,8 @@ function Plot({ data, width }) {
   );
 }
 
-
 Plot.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.objectOf(PropTypes.array).isRequired,
   width: PropTypes.number.isRequired,
 };
 
