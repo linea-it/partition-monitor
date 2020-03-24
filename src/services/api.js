@@ -12,11 +12,8 @@ export const getHistory = ({ offset, limit }) => {
   return axios.get('/history', params).then(res => res.data);
 };
 
-export const getPartitionsByServer = server => {
-  return axios.get().then(res => {
-    return res.data.filter(row => row.server === server);
-  });
-};
+export const getPartitionsByServer = server =>
+  axios.get('/').then(res => res.data.filter(row => row.server === server));
 
 export const getHistoryByServer = ({ server, offset, limit }) =>
   axios
