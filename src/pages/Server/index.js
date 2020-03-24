@@ -30,9 +30,8 @@ function Server({ setTitle, size }) {
 
   const columns = [
     {
-      name: 'available',
-      title: 'Available',
-      customElement: row => megabytesToSize(row.available),
+      name: 'server',
+      title: 'Server',
     },
     {
       name: 'description',
@@ -47,13 +46,14 @@ function Server({ setTitle, size }) {
       title: 'Mountpoint',
     },
     {
-      name: 'server',
-      title: 'Server',
-    },
-    {
       name: 'size',
       title: 'Size',
       customElement: row => megabytesToSize(row.size),
+    },
+    {
+      name: 'available',
+      title: 'Available',
+      customElement: row => megabytesToSize(row.available),
     },
     {
       name: 'use',
@@ -71,10 +71,6 @@ function Server({ setTitle, size }) {
     setTitle(server);
     setPartitions([]);
   }, [server, setTitle]);
-
-  useEffect(() => {
-    console.log(period);
-  }, [period]);
 
   useEffect(() => {
     // If is the first page load or if the route was changed through the drawer:
@@ -114,32 +110,15 @@ function Server({ setTitle, size }) {
         res.data.forEach(row => {
           xAxis.push(row.date);
           yAxis.push(row.use / 1000000);
-          yStackAxis.push((row.available + row.use) / 1000000);
         });
 
-        setPlotData([
-          {
-            x: xAxis,
-            y: yAxis,
-            type: 'scatter',
-            mode: 'lines',
-            line: {
-              color: '#17BECF',
-            },
-          },
-          // {
-          //   x: xAxis,
-          //   y: yStackAxis,
-          //   type: 'scatter',
-          // },
-        ]);
+        setPlotData({
+          x: xAxis,
+          y: yAxis,
+        });
       }
     });
   }, [server, selectedPartition, period]);
-
-  useEffect(() => {
-    console.log('plotData', plotData);
-  }, [plotData]);
 
   const handlePeriodChange = e => setPeriod(Number(e.target.value));
 
