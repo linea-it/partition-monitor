@@ -57,12 +57,12 @@ function Server({ setTitle, size }) {
     },
     {
       name: 'use',
-      title: 'Use',
+      title: 'Used',
       customElement: row => megabytesToSize(row.use),
     },
     {
       name: 'usepercent',
-      title: '% Use',
+      title: '% Used',
       align: 'center',
     },
   ];
