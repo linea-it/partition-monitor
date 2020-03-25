@@ -103,8 +103,12 @@ function Server({ setTitle, size }) {
       isToday,
     }).then(res => {
       if (res.data.length > 0) {
-        const xAxis = [];
-        const yAxis = [];
+        // Starting the xAxis and yAxis with the start date and null, respectively,
+        // makes sure that the plot will be stretched 'till the start date
+        // and not just simply omit the period
+        // that it doesn't have a corresponding yAxis value:
+        const xAxis = [startDate];
+        const yAxis = [null];
 
         res.data.forEach(row => {
           xAxis.push(row.date);
