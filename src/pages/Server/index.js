@@ -108,7 +108,7 @@ function Server({ setTitle, size }) {
 
         res.data.forEach(row => {
           xAxis.push(row.date);
-          yAxis.push(row.use / 1000000);
+          yAxis.push(row.use / 1048576);
         });
 
         setPlotData({
