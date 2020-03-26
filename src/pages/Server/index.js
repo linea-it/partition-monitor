@@ -84,11 +84,12 @@ function Server({ setTitle, size }) {
 
   useEffect(() => {
     let startDate = moment();
-    const endDate = moment().format('YYYY-MM-DD');
+    const endDate = moment().format('YYYY-MM-DD HH:mm:ss');
     let isToday = false;
 
     if (period === 0) {
       isToday = true;
+      startDate = startDate.format('YYYY-MM-DD');
     } else if (period === 0.25) {
       startDate = startDate.subtract(7, 'days').format('YYYY-MM-DD');
     } else {
@@ -115,17 +116,43 @@ function Server({ setTitle, size }) {
           yAxis.push(row.use / 1048576);
         });
 
+          // When there's only one entry point, it's impossible to make a line,
+          // So, to fix this (because of requests), a very bizarre aproximation was made:
+          // Create another entry point with the set start date and the same use value as the one entry.
+          if(res.data.length === 1) {
+            xAxis.push(startDate);
+            yAxis.push(res.data[0].use / 1048576);
+          }
+
+        setPlotData({
+          x: xAxis,
+          y: yAxis,
+        });
+
+      } else {
+        const partition = partitions.filter(p => p.mountpoint === selectedPartition)[0];
+        const xAxis = [`${startDate} 00:00:00`, endDate];
+        const yAxis = [partition.use / 1048576, partition.use / 1048576];
+
         setPlotData({
           x: xAxis,
           y: yAxis,
         });
       }
     });
-  }, [server, selectedPartition, period]);
+  }, [server, partitions, selectedPartition, period]);
 
-  const handlePeriodChange = e => setPeriod(Number(e.target.value));
+  const handlePeriodChange = e => {
+    if(Number(e.target.value) !== period) {
+      setPeriod(Number(e.target.value))
+    }
+  };
 
-  const handlePartitionChange = e => setSelectedPartition(e.target.value);
+  const handlePartitionChange = e => {
+    if(e.target.value !== selectedPartition) {
+      setSelectedPartition(e.target.value)
+    }
+  };
 
   return (
     <Grid container spacing={3}>
