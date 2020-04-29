@@ -223,6 +223,18 @@ function Drawer({ title, children }) {
             </List>
           </Collapse>
           <Divider className={classes.borderDrawer} />
+          <Link to="/duc.cgi" className={classes.invisibleLink}>
+            <ListItem button>
+              <ListItemIcon className={classes.ListIconDrawer}>
+                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-chart-pie')} />
+              </ListItemIcon>
+              <ListItemText
+                primary="Detailed Vision"
+                className={classes.textDrawer}
+              />
+            </ListItem>
+          </Link>
+          <Divider className={classes.borderDrawer} />
         </List>
         <div className={classes.drawerControlWrapper}>
           <IconButton
