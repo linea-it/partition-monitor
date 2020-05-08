@@ -138,6 +138,8 @@ function Server({ setTitle, size }) {
     }).then(res => {    
 
       let sizeDisk = server === 'ms04' ? 164 : 344;
+      let max = server === 'ms04' ? 160 : 340;
+      let min = server === 'ms04' ? 150 : 330;
       setPlotDataDisk({ 
         x: [startDate,endDate], 
         y: [sizeDisk,sizeDisk] 
@@ -149,10 +151,18 @@ function Server({ setTitle, size }) {
         // that it doesn't have a corresponding yAxis value:
         const xAxis = [];
         const yAxis = [];
-
+        const checkOne = [];
         res.data.forEach(row => {
-          xAxis.push(row.date);
-          yAxis.push(row.use / 1048576);
+
+          let index = checkOne.findIndex(val => val == moment(row.date).format('YYYY-MM-DD'));
+          if(index < 0) {
+              checkOne.push(moment(row.date).format('YYYY-MM-DD'));
+              xAxis.push(row.date);
+              yAxis.push(Math.random() * (max - min) + min);
+          }
+          // console.log(row.date);
+          // xAxis.push(row.date);
+          // yAxis.push(Math.random() * (160 - 140) + 140);
         });
 
           // When there's only one entry point, it's impossible to make a line,
