@@ -6,7 +6,7 @@ function Duc({ partition }) {
     <div>
       <iframe
         title="duc.cgi"
-        src={`https://devel6.linea.gov.br/cgi-bin/${partition.server}/duc.cgi?cmd=index&path=${partition.mountpoint}`}
+        src={`https://devel6.linea.gov.br/cgi-bin/${partition.server}/duc.cgi?cmd=index&path=${partition.mountpoint === '/home' ? '/mnt/devhome' : partition.mountpoint}`}
         width="100%"
         height="950px"
         frameBorder="0"
