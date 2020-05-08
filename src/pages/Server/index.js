@@ -21,8 +21,7 @@ import {
   getSizeByServerAndPartitionAndPeriod,
 } from '../../services/api';
 import { megabytesToSize } from '../../services/math';
-import DonutLargeIcon from '@material-ui/icons/DonutLarge';
-import DucDialog from '../Duc/dialog';
+import BarChartIcon from '@material-ui/icons/BarChart';import DucDialog from '../Duc/dialog';
 import { RangeDatePicker } from '@y0c/react-datepicker';
 import "../../themes/calendar.scss";
 import styles from './styles';
@@ -48,7 +47,7 @@ function Server({ setTitle, size }) {
 
   const rowDucGraph = (row) => {
     return (
-      <>
+      <div className={classes.centralizarIcon}>
         <IconButton 
           color="inherit"
           aria-label="Detailed version"
@@ -58,9 +57,9 @@ function Server({ setTitle, size }) {
             setCurrentPartition(row);
           }}
         >
-          <DonutLargeIcon />
+          <BarChartIcon />
         </IconButton>
-      </>
+      </div>
     )
   }
 
