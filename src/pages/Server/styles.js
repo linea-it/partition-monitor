@@ -26,6 +26,9 @@ const styles = makeStyles({
     'text-overflow': 'ellipsis',
     'padding-right': '24px',
   },
+  centralizarIcon:{
+    textAlignLast: 'center',
+  }
 });
 
 export default styles;
