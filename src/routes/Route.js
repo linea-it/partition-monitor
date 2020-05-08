@@ -7,7 +7,7 @@ export default function RouteWrapper({
   component: Component,
   ...rest
 }) {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('Partition Monitor');
 
   return (
     <Route

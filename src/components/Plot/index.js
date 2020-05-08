@@ -2,14 +2,20 @@ import React from 'react';
 import Plotly from 'react-plotly.js';
 import PropTypes from 'prop-types';
 
-function Plot({ data, width }) {
+function Plot({ data, dataDisk, width }) {
   return (
     <Plotly
-      data={[{
-        ...data,
-        type: 'scatter',
-        mode: 'lines',
-      }]}
+      data={[
+        {
+          ...dataDisk,
+          name: 'Size Disk',
+          mode: 'scatter',
+        }, {
+          ...data,
+          name: 'Use Disk',
+          mode: 'scatter',
+        }
+      ]}
       layout={{
         width,
         height: 'auto',
@@ -41,6 +47,7 @@ function Plot({ data, width }) {
 
 Plot.propTypes = {
   data: PropTypes.objectOf(PropTypes.array).isRequired,
+  dataDisk: PropTypes.objectOf(PropTypes.array).isRequired,
   width: PropTypes.number.isRequired,
 };
 

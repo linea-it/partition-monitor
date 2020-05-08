@@ -2,6 +2,8 @@ import axios from 'axios';
 
 export const url = process.env.REACT_APP_API;
 axios.defaults.baseURL = url;
+let hash = btoa("fernando.silva:linea2019"); 
+axios.defaults.headers.common.Authorization = "Basic " + hash;
 
 export const getHistory = ({ offset, limit }) => {
   const params = {
@@ -27,16 +29,17 @@ export const getSizeByServerAndPartitionAndPeriod = ({
   endDate,
   isToday,
 }) => {
+  var filterPartition = partition && partition !== 'All' ? `&mountpoint__contains=${partition}` : '';  
   if (isToday) {
     return axios
       .get(
-        `/history?server__eq=${server}&mountpoint__contains=${partition}&date__contains=${endDate}&cols=date,use,available`
+        `/history?server__eq=${server}${filterPartition}&date__contains=${endDate}&cols=date,use,available`
       )
       .then(res => res.data);
   }
   return axios
     .get(
-      `/history?server__eq=${server}&mountpoint__contains=${partition}&date__range=${startDate},${endDate}&cols=date,use,available`
+      `/history?server__eq=${server}${filterPartition}&date__range=${startDate},${endDate}&cols=date,use,available`
     )
     .then(res => res.data);
 };

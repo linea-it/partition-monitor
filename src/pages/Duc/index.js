@@ -1,17 +1,12 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
-function Duc({ setTitle }) {
-
-  useEffect(() => {
-    setTitle('Detailed Vision')
-  }, [setTitle])
-
+function Duc({ partition }) { 
   return (
     <div>
       <iframe
         title="duc.cgi"
-        src="https://devel6.linea.gov.br/"
+        src={`https://devel6.linea.gov.br/cgi-bin/${partition.server}/duc.cgi?cmd=index&path=${partition.mountpoint}`}
         width="100%"
         height="950px"
         frameBorder="0"
@@ -21,7 +16,7 @@ function Duc({ setTitle }) {
 }
 
 Duc.propTypes = {
-  setTitle: PropTypes.func.isRequired,
+  partition: PropTypes.object.isRequired,
 }
 
 export default Duc;

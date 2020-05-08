@@ -58,6 +58,11 @@ const theme = createMuiTheme({
         position: 'relative',
       },
     },
+    MuiDialog:{
+      paper: {
+        width: '70%',
+      },
+    },
   },
 });
 
