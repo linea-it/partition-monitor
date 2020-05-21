@@ -25,9 +25,13 @@ const styles = makeStyles({
     'white-space': 'nowrap',
     'text-overflow': 'ellipsis',
     'padding-right': '24px',
+    'zIndex': '1100',
   },
-  centralizarIcon:{
+  centralizarIcon: {
     textAlignLast: 'center',
+  },
+  pickerInput: {
+    
   }
 });
 
