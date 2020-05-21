@@ -9,11 +9,11 @@ function Plot({ data, dataDisk, width }) {
         {
           ...dataDisk,
           name: 'Size Disk',
-          mode: 'scatter',
+          mode: 'lines',
         }, {
           ...data,
           name: 'Use Disk',
-          mode: 'scatter',
+          mode: 'lines',
         }
       ]}
       layout={{
