@@ -222,8 +222,8 @@ function Drawer({ title, children }) {
               </Link>
             </List>
           </Collapse>
-          {/* <Divider className={classes.borderDrawer} />
-          <Link to="/duc.cgi" className={classes.invisibleLink}>
+          <Divider className={classes.borderDrawer} />
+          <Link to="/detailed-version" className={classes.invisibleLink}>
             <ListItem button>
               <ListItemIcon className={classes.ListIconDrawer}>
                 <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-chart-pie')} />
@@ -233,7 +233,7 @@ function Drawer({ title, children }) {
                 className={classes.textDrawer}
               />
             </ListItem>
-          </Link> */}
+          </Link>
           <Divider className={classes.borderDrawer} />
         </List>
         <div className={classes.drawerControlWrapper}>
