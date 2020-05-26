@@ -8,9 +8,6 @@ const styles = makeStyles({
     fontSize: '1rem',
     display: 'inline-flex',
   },
-  inputDayPicker : {
-    
-  },
   textField : {
     pointerEvents: 'none',
   },

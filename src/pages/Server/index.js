@@ -125,7 +125,8 @@ function Server({ setTitle, size }) {
     let endDate = moment().format('YYYY-MM-DD HH:mm:ss');
     let isToday = false;
 
-    if (period === 0) {
+    if (period < 0.1) {
+      setPeriod(0);
       startDate = moment(dateRange.from).format('YYYY-MM-DD HH:mm:ss');
       endDate = moment(dateRange.to).format('YYYY-MM-DD HH:mm:ss');
     } else if (period === 0.25) {
@@ -142,8 +143,6 @@ function Server({ setTitle, size }) {
       endDate,
       isToday,
     }).then(res => {   
-      console.log(res.data.length);
-      
       let sizeDisk = 0; 
       partitions.map(function(partition) {
         if ( selectedPartition === 'all' || (selectedPartition !== 'all' && partition.mountpoint === selectedPartition)) {
@@ -155,40 +154,36 @@ function Server({ setTitle, size }) {
         }
       });
       if (res.data.length > 0) {
-        // Starting the xAxis and yAxis with the start date and null, respectively,
-        // makes sure that the plot will be stretched 'till the start date
-        // and not just simply omit the period
-        // that it doesn't have a corresponding yAxis value:
         const xAxis = [];
         const yAxis = [];
         res.data.forEach(row => {
-              xAxis.push(row.date);
-              yAxis.push( (row.use / 1048576).toFixed(2) );
+          xAxis.push(row.date);
+          yAxis.push( (( parseInt(row.total_use) || row.use ) / 1048576).toFixed(2) );
         });
-
-          // When there's only one entry point, it's impossible to make a line,
-          // So, to fix this (because of requests), a very bizarre aproximation was made:
-          // Create another entry point with the set start date and the same use value as the one entry.
         if(res.data.length === 1) {
           xAxis.push(startDate);
-          yAxis.push( (res.data[0].use / 1048576).toFixed(2) );
+          yAxis.push( (( parseInt(res.data[0].total_use) || res.data[0].use ) / 1048576).toFixed(2) );
         }
-
         setPlotData({
           x: xAxis,
           y: yAxis,
         });
-
       } else {
         const partition = partitions.filter(p => p.mountpoint === selectedPartition)[0];
+        const xAxis = [];
+        const yAxis = [];
         if (partition) {
-          const xAxis = [`${startDate} 00:00:00`, endDate];
-          const yAxis = [partition.use / 1048576, partition.use / 1048576];
-  
+          xAxis = [`${startDate} 00:00:00`, endDate];
+          yAxis = [partition.use / 1048576, partition.use / 1048576];
           setPlotData({
             x: xAxis,
             y: yAxis,
           }); 
+        }else {
+          setPlotData({
+            x: xAxis,
+            y: yAxis,
+          });
         }
       }
     });
@@ -241,7 +236,7 @@ function Server({ setTitle, size }) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4} className={classes.datePicker}>
+        <Grid item xs={12} md={6} className={classes.datePicker}>
           <BasicDatePicker 
             dateRange={dateRange}
             setDateRange={setDateRange}

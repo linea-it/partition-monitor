@@ -30,16 +30,18 @@ export const getSizeByServerAndPartitionAndPeriod = ({
   isToday,
 }) => {
   var filterPartition = partition && partition !== 'all' ? `&mountpoint__contains=${partition}` : '';  
+  var api_base = partition && partition !== 'all' ? 'history' : 'server_history';   
+  var cols = partition && partition !== 'all' ? '&cols=date,use,available' : '';  
   if (isToday) {
     return axios
       .get(
-        `/history?server__eq=${server}${filterPartition}&date__contains=${endDate}&cols=date,use,available`
+        `/${api_base}?server__eq=${server}${filterPartition}&date__contains=${endDate}${cols}`
       )
       .then(res => res.data);
   }
   return axios
     .get(
-      `/history?server__eq=${server}${filterPartition}&date__range=${startDate},${endDate}&cols=date,use,available`
+      `/${api_base}?server__eq=${server}${filterPartition}&date__range=${startDate},${endDate}${cols}`
     )
     .then(res => res.data);
 };
