@@ -28,7 +28,7 @@ function BasicDatePicker({ dateRange, setDateRange, setPeriod }) {
 
   const handleToChange = (to) =>{
     setDateRange({...dateRange, to }, showFromMonth);
-    setPeriod(0);
+    setPeriod( (Math.random() * (9999 - 1) + 1) - 20000 );
   }
 
   let { from, to } = dateRange;
@@ -99,12 +99,12 @@ function BasicDatePicker({ dateRange, setDateRange, setPeriod }) {
           }
           .InputFromTo .DayPickerInput-Overlay {
             width: 600px;
+            z-index: 5;
           }
           .InputFromTo-to .DayPickerInput-Overlay {
+            width: 600px;
             margin-left: -198px;
-          }
-          InputFromTo-to {
-            z-index: 999999;
+            z-index: 5;
           }
           input {
             font: inherit;
@@ -118,11 +118,14 @@ function BasicDatePicker({ dateRange, setDateRange, setPeriod }) {
             min-width: 0;
             background: none;
             box-sizing: content-box;
-            animation-name: mui-auto-fill-cancel;
-            -webkit-tap-highlight-color: transparent;
-            transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-            borderBottom: 1px solid rgba(0, 0, 0, 0.42);
           }
+          input:focus {
+            outline: -webkit-focus-ring-color auto 0px;
+          }
+          .MuiFormControl-root {
+            z-index: 200;
+          }
+        }
         `}</style>
       </Helmet>
     </div>
