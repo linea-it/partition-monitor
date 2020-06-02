@@ -8,7 +8,8 @@ import {
   Select,
   FormControl,
   InputLabel,
-  IconButton 
+  IconButton,
+  Link 
 } from '@material-ui/core';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
@@ -59,46 +60,67 @@ function Server({ setTitle, size }) {
     )
   }
 
+  const mountpointCustom = (row) => {
+    return (
+      <div className={classes.centralizarIcon}>
+        <Link
+        className={classes.link}
+        onClick={()=>{
+          setSelectedPartition(row.mountpoint)
+        }}>
+          {row.mountpoint}
+        </Link>
+      </div>
+    )
+  }
+
   const columns = [
     {
       name: 'description',
       title: 'Description',
-      width: '220px',
+      width: '180px',
     },
     {
       name: 'mountpoint',
       title: 'Mountpoint',
-      width: '300px',
+      customElement: row => mountpointCustom(row),
+      width: '150px',
     },
     {
       name: 'size',
       title: 'Size',
       customElement: row => megabytesToSize(row.size),
-    },
-    {
-      name: 'available',
-      title: 'Available',
-      customElement: row => megabytesToSize(row.available),
+      width: '70px',
     },
     {
       name: 'use',
       title: 'Used',
       customElement: row => megabytesToSize(row.use),
+      width: '70px',
     },
     {
-      name: 'availablepercent',
-      title: '% Available',
-      align: 'center',
+      name: 'available',
+      title: 'Available',
+      customElement: row => megabytesToSize(row.available),
+      width: '70px',
     },
     {
       name: 'usepercent',
       title: '% Used',
       align: 'center',
+      width: '70px',
+    },
+    {
+      name: 'availablepercent',
+      title: '% Available',
+      align: 'center',
+      width: '70px',
     },
     {
       name: 'server',
       title: 'Detailed version',
       customElement: row => rowDucGraph(row),
+      width: '70px',
     },
   ];
 
@@ -110,12 +132,22 @@ function Server({ setTitle, size }) {
   useEffect(() => {
     // If is the first page load or if the route was changed through the drawer:
     if (partitions.length === 0) {
+      let partitionAll = {
+        description: server,
+        mountpoint: 'all',
+        filesystem: server,
+        server: server,
+        size: 0,
+        available: 0,
+        use: 0,
+      };
       getPartitionsByServer(server).then(res => {
-        setSelectedPartition('all');   
-        setPartitions(res.map(function(row) {
+        setSelectedPartition('all');        
+        setPartitions([partitionAll].concat(res.map(function(row) {
           row.availablepercent = 100-parseInt(row.usepercent.split("%")) + '%';
           return row;
-        }))     
+        })));
+
       });
     }
   }, [server, partitions]);
@@ -143,8 +175,15 @@ function Server({ setTitle, size }) {
       endDate,
       isToday,
     }).then(res => {   
-      let sizeDisk = 0; 
+      let sizeDisk = 0;
+      if (partitions[0]) {
+        partitions[0].size = 0;
+        partitions[0].use = 0;
+        partitions[0].available = 0;
+      }
       partitions.map(function(partition) {
+        console.log(partition);
+        
         if ( selectedPartition === 'all' || (selectedPartition !== 'all' && partition.mountpoint === selectedPartition)) {
           sizeDisk += (partition.size / 1048576);
           setPlotDataDisk({ 
@@ -152,10 +191,16 @@ function Server({ setTitle, size }) {
             y: [sizeDisk.toFixed(2),sizeDisk.toFixed(2)], 
           });
         }
+        partitions[0].size += parseInt(partition.size);
+        partitions[0].use += parseInt(partition.use);
+        partitions[0].available += parseInt(partition.available);
+        partitions[0].usepercent = ((partitions[0].use/partitions[0].size)*100).toFixed(0) + '%';
+        partitions[0].availablepercent = ((1-(partitions[0].use/partitions[0].size))*100).toFixed(0)  + '%';
+
       });
+      let xAxis = [];
+      let yAxis = [];
       if (res.data.length > 0) {
-        const xAxis = [];
-        const yAxis = [];
         res.data.forEach(row => {
           xAxis.push(row.date);
           yAxis.push( (( parseInt(row.total_use) || row.use ) / 1048576).toFixed(2) );
@@ -170,8 +215,6 @@ function Server({ setTitle, size }) {
         });
       } else {
         const partition = partitions.filter(p => p.mountpoint === selectedPartition)[0];
-        const xAxis = [];
-        const yAxis = [];
         if (partition) {
           xAxis = [`${startDate} 00:00:00`, endDate];
           yAxis = [partition.use / 1048576, partition.use / 1048576];
@@ -191,23 +234,22 @@ function Server({ setTitle, size }) {
 
   const handlePeriodChange = e => {
     if(Number(e.target.value) !== period) {
-
       setPeriod(Number(e.target.value))
     }
   };
 
-  const handlePartitionChange = e => {
-    if(e.target.value !== selectedPartition) {
-      setSelectedPartition(e.target.value)
-    }else {
-      setSelectedPartition('all')
-    }
-  };
+  // const handlePartitionChange = e => {
+  //   if(e.target.value !== selectedPartition) {
+  //     setSelectedPartition(e.target.value)
+  //   }else {
+  //     setSelectedPartition('all')
+  //   }
+  // };
 
   return (
     <>
       <Grid container spacing={3}>
-        <Grid item xs={2}>
+        {/* <Grid item xs={2}>
           <FormControl>
             <InputLabel>Partition/Disk</InputLabel>
             <Select value={selectedPartition} onChange={handlePartitionChange}>
@@ -226,7 +268,6 @@ function Server({ setTitle, size }) {
           <FormControl>
             <InputLabel>Period</InputLabel>
             <Select value={period} onChange={handlePeriodChange}>
-              {/* <MenuItem value={0}>Today</MenuItem> */}
               <MenuItem value={0.25}>Last Week</MenuItem>
               <MenuItem value={1}>Last Month</MenuItem>
               <MenuItem value={6}>Last Six Months</MenuItem>
@@ -242,8 +283,8 @@ function Server({ setTitle, size }) {
             setDateRange={setDateRange}
             setPeriod={setPeriod} 
           />
-        </Grid>
-        <Grid item xs={12}>
+        </Grid> */}
+        <Grid item xs={6}>
           <Card>
             <CardHeader
               title={
@@ -255,7 +296,8 @@ function Server({ setTitle, size }) {
             <CardContent>
               <Table
                 columns={columns}
-                data={selectedPartition !== 'all' ? partitions.filter(row => row.mountpoint === selectedPartition) : partitions}
+                data={partitions}
+                // data={selectedPartition !== 'all' ? partitions.filter(row => row.mountpoint === selectedPartition || row.mountpoint === 'all') : partitions}
                 totalCount={1}
                 remote={false}
                 hasSearching={false}
@@ -263,10 +305,44 @@ function Server({ setTitle, size }) {
               />
             </CardContent>
           </Card>
-        <Grid item xs={12}>
-          <Plot data={plotData} dataDisk={plotDataDisk} width={size.width} />
         </Grid>
+        <Grid item xs={6}>
+          <Card>
+            <CardHeader
+              title={
+                <span>
+                  Gráfico de uso - {selectedPartition === 'all' ? server : selectedPartition} 
+                </span>
+              }
+            />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item item xs={4}>
+                  <FormControl>
+                    <InputLabel>Period</InputLabel>
+                    <Select value={period} onChange={handlePeriodChange}>
+                      <MenuItem value={0.25}>Last Week</MenuItem>
+                      <MenuItem value={1}>Last Month</MenuItem>
+                      <MenuItem value={6}>Last Six Months</MenuItem>
+                      <MenuItem value={12}>Last Year</MenuItem>
+                      <MenuItem value={24}>Last Two Years</MenuItem>
+                      <MenuItem value={0}>Customized</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={8} className={classes.datePicker}>
+                  <BasicDatePicker 
+                    dateRange={dateRange}
+                    setDateRange={setDateRange}
+                    setPeriod={setPeriod} 
+                  />
+                </Grid>
+              </Grid>
+              <Plot data={plotData} dataDisk={plotDataDisk} width={800} />
+            </CardContent>
+          </Card>
         </Grid>
+        
       </Grid>
       <DucDialog open={open} setOpen={setOpen} partition={currentPartition} />
     </>

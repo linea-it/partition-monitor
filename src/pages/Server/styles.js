@@ -4,6 +4,10 @@ const styles = makeStyles({
   centralizarIcon: {
     textAlignLast: 'center',
   },
+  link: {
+    cursor: 'pointer',
+    color: 'blue',
+  }
 });
 
 export default styles;

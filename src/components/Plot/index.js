@@ -32,6 +32,7 @@ function Plot({ data, dataDisk, width }) {
           automargin: true,
           autorange: true,
           ticksuffix: 'TB',
+          nticks : 5,  
         },
         hovermode: 'closest',
         autosize: true,
