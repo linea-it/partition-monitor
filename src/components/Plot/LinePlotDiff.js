@@ -2,7 +2,12 @@ import React from 'react';
 import Plotly from 'react-plotly.js';
 import PropTypes from 'prop-types';
 
-function Plot({ data, dataDisk, width }) {
+function LinePlotDiff({ data, dataDisk, width }) {
+  if (dataDisk) {
+    
+  } else {
+    // data.y = data.z;
+  }
   return (
     <Plotly
       data={[
@@ -19,7 +24,7 @@ function Plot({ data, dataDisk, width }) {
       layout={{
         width,
         height: 'auto',
-        title: 'Size per period',
+        title: 'Diff per period',
         barmode: 'group',
         xaxis: {
           title: 'Date',
@@ -46,10 +51,10 @@ function Plot({ data, dataDisk, width }) {
   );
 }
 
-Plot.propTypes = {
+LinePlotDiff.propTypes = {
   data: PropTypes.objectOf(PropTypes.array).isRequired,
   dataDisk: PropTypes.objectOf(PropTypes.array).isRequired,
   width: PropTypes.number.isRequired,
 };
 
-export default Plot;
+export default LinePlotDiff;
