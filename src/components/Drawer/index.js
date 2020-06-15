@@ -31,8 +31,8 @@ import Footer from '../Footer';
 function Drawer({ title, children }) {
   const [open, setOpen] = useState(true);
   const [drawerTree, setDrawerTree] = useState({
-    database: true,
-    fileserver: true,
+    database: false,
+    fileserver: false,
   });
 
   const handleDrawerClick = () => setOpen(!open);
