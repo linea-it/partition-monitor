@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import pink from '@material-ui/core/colors/pink';
+import blue from '@material-ui/core/colors/blue';
 
 const theme = createMuiTheme({
   palette: {
@@ -9,7 +9,7 @@ const theme = createMuiTheme({
       dark: '#243141',
       contrastText: '#fff',
     },
-    secondary: pink,
+    secondary: blue,
   },
   typography: {
     useNextVariants: true,
@@ -17,7 +17,7 @@ const theme = createMuiTheme({
   overrides: {
     Pagination: {
       activeButton: {
-        color: pink[500],
+        color: blue[500],
       },
     },
     MuiCardHeader: {

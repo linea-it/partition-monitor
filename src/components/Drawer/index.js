@@ -31,8 +31,8 @@ import Footer from '../Footer';
 function Drawer({ title, children }) {
   const [open, setOpen] = useState(true);
   const [drawerTree, setDrawerTree] = useState({
-    database: true,
-    fileserver: true,
+    database: false,
+    fileserver: false,
   });
 
   const handleDrawerClick = () => setOpen(!open);
@@ -223,7 +223,7 @@ function Drawer({ title, children }) {
             </List>
           </Collapse>
           {/* <Divider className={classes.borderDrawer} />
-          <Link to="/duc.cgi" className={classes.invisibleLink}>
+          <Link to="/detailed-version" className={classes.invisibleLink}>
             <ListItem button>
               <ListItemIcon className={classes.ListIconDrawer}>
                 <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-chart-pie')} />

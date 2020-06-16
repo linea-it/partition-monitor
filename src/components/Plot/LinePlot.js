@@ -2,18 +2,18 @@ import React from 'react';
 import Plotly from 'react-plotly.js';
 import PropTypes from 'prop-types';
 
-function Plot({ data, dataDisk, width }) {
+function LinePlot({ data, dataDisk, width }) {
   return (
     <Plotly
       data={[
         {
           ...dataDisk,
           name: 'Size Disk',
-          mode: 'scatter',
+          mode: 'lines',
         }, {
           ...data,
           name: 'Use Disk',
-          mode: 'scatter',
+          mode: 'lines',
         }
       ]}
       layout={{
@@ -32,6 +32,7 @@ function Plot({ data, dataDisk, width }) {
           automargin: true,
           autorange: true,
           ticksuffix: 'TB',
+          nticks : 5,  
         },
         hovermode: 'closest',
         autosize: true,
@@ -45,10 +46,10 @@ function Plot({ data, dataDisk, width }) {
   );
 }
 
-Plot.propTypes = {
+LinePlot.propTypes = {
   data: PropTypes.objectOf(PropTypes.array).isRequired,
   dataDisk: PropTypes.objectOf(PropTypes.array).isRequired,
   width: PropTypes.number.isRequired,
 };
 
-export default Plot;
+export default LinePlot;
