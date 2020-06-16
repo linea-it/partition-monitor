@@ -3,11 +3,6 @@ import Plotly from 'react-plotly.js';
 import PropTypes from 'prop-types';
 
 function LinePlot({ data, dataDisk, width }) {
-  if (dataDisk) {
-    
-  } else {
-    // data.y = data.z;
-  }
   return (
     <Plotly
       data={[

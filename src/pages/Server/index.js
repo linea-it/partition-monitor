@@ -10,11 +10,11 @@ import {
   FormControl,
   InputLabel,
   IconButton,
-  Link 
+  Button,
+  Divider 
 } from '@material-ui/core';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
-import { withSize } from 'react-sizeme';
 import PropTypes from 'prop-types';
 import LinePlot from '../../components/Plot/LinePlot';
 import LinePlotDiff from '../../components/Plot/LinePlotDiff';
@@ -27,11 +27,8 @@ import {
 import { megabytesToSize, megabytesToTerabytesGraph, remainderPercentage } from '../../services/math';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import DucDialog from '../Duc/dialog';
-import styles from './styles';
-import BasicDatePicker from '../../components/BasicDatePicker';
 
-function Server({ setTitle, size }) {
-  const classes = styles();
+function Server({ setTitle }) {
   const [period, setPeriod] = useState(1);
   const [plotDataDisk, setPlotDataDisk] = useState({ x: [], y: [] });
   const [plotData, setPlotData] = useState({ x: [], y: [] });
@@ -44,33 +41,30 @@ function Server({ setTitle, size }) {
 
   const rowDucGraph = (row) => {
     return (
-      <div className={classes.centralizarIcon}>
-        <IconButton 
-          color="inherit"
-          aria-label="Detailed version"
-          component="span"
-          onClick={()=>{
-            setOpen(true);
-            setCurrentPartition(row);
-          }}
-        >
-          <BarChartIcon />
-        </IconButton>
-      </div>
+      <IconButton 
+        color="inherit"
+        aria-label="Detailed version"
+        component="span"
+        onClick={()=>{
+          setOpen(true);
+          setCurrentPartition(row);
+        }}
+      >
+        <BarChartIcon />
+      </IconButton>
     )
   }
 
   const mountpointCustom = (row) => {
     return (
-      <div className={classes.centralizarIcon}>
-        <Link
-        className={classes.link}
+      <Button
+        color="secondary"
+        variant="text"
         onClick={()=>{
           setSelectedPartition(row.mountpoint)
         }}>
           {row.mountpoint}
-        </Link>
-      </div>
+      </Button>
     )
   }
 
@@ -121,6 +115,7 @@ function Server({ setTitle, size }) {
       title: 'Detailed version',
       customElement: row => rowDucGraph(row),
       width: '70px',
+      sortingEnable: false,
     },
   ];
 
@@ -222,9 +217,9 @@ function Server({ setTitle, size }) {
 
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid item xs={6} className={classes.gridHeight}>
-          <Card>
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item xs={6}>
+          <Card style={{ height: '100%' }}>
             <CardHeader
               title={
                 <span>
@@ -239,7 +234,6 @@ function Server({ setTitle, size }) {
                 totalCount={1}
                 remote={false}
                 hasSearching={false}
-                hasSorting={false}
               />
             </CardContent>
           </Card>
@@ -268,16 +262,11 @@ function Server({ setTitle, size }) {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={8} className={classes.flexEnd}>
-                  <BasicDatePicker 
-                    dateRange={dateRange}
-                    setDateRange={setDateRange}
-                    setPeriod={setPeriod} 
-                  />
+                <Grid item xs={8}>
                 </Grid>
               </Grid>
               <LinePlot data={plotData} dataDisk={plotDataDisk} width={800} />
-              <div className={classes.spacingDiv} />
+              <Divider />
               <LinePlotDiff data={plotData} width={800} />
             </CardContent>
           </Card>
@@ -290,11 +279,7 @@ function Server({ setTitle, size }) {
 }
 
 Server.propTypes = {
-  size: PropTypes.shape({
-    width: PropTypes.number,
-    height: PropTypes.number,
-  }).isRequired,
   setTitle: PropTypes.func.isRequired,
 };
 
-export default withSize()(Server);
+export default Server;

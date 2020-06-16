@@ -3,11 +3,6 @@ import Plotly from 'react-plotly.js';
 import PropTypes from 'prop-types';
 
 function LinePlotDiff({ data, dataDisk, width }) {
-  if (dataDisk) {
-    
-  } else {
-    // data.y = data.z;
-  }
   return (
     <Plotly
       data={[
@@ -24,7 +19,7 @@ function LinePlotDiff({ data, dataDisk, width }) {
       layout={{
         width,
         height: 'auto',
-        title: 'Diff per period',
+        title: 'Variation in period',
         barmode: 'group',
         xaxis: {
           title: 'Date',
