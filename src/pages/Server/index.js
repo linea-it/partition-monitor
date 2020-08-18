@@ -10,14 +10,13 @@ import {
   FormControl,
   InputLabel,
   IconButton,
-  Button,
-  Divider 
+  Button
 } from '@material-ui/core';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import LinePlot from '../../components/Plot/LinePlot';
-import LinePlotDiff from '../../components/Plot/LinePlotDiff';
+// import LinePlotDiff from '../../components/Plot/LinePlotDiff';
 import Table from '../../components/Table';
 import {
   getServerHistoryByName,
@@ -40,19 +39,23 @@ function Server({ setTitle }) {
   const [dateRange, setDateRange] = useState([ null, null]);
 
   const rowDucGraph = (row) => {
-    return (
-      <IconButton 
-        color="inherit"
-        aria-label="Detailed version"
-        component="span"
-        onClick={()=>{
-          setOpen(true);
-          setCurrentPartition(row);
-        }}
-      >
-        <BarChartIcon />
-      </IconButton>
-    )
+    if (server != 'desdb4' && server != 'desdb6') {
+      return (
+        <IconButton 
+          color="inherit"
+          aria-label="Detailed version"
+          component="span"
+          onClick={()=>{
+            setOpen(true);
+            setCurrentPartition(row);
+          }}
+        >
+          <BarChartIcon />
+        </IconButton>
+      )
+    } else {
+      return '-'
+    }
   }
 
   const mountpointCustom = (row) => {
@@ -234,6 +237,10 @@ function Server({ setTitle }) {
                 totalCount={1}
                 remote={false}
                 hasSearching={false}
+                defaultSorting={[{
+                  columnName: 'mountpoint',
+                  direction: 'asc',
+                }]}
               />
             </CardContent>
           </Card>
@@ -266,8 +273,8 @@ function Server({ setTitle }) {
                 </Grid>
               </Grid>
               <LinePlot data={plotData} dataDisk={plotDataDisk} width={800} />
-              <Divider />
-              <LinePlotDiff data={plotData} width={800} />
+              {/* <Divider />
+              <LinePlotDiff data={plotData} width={800} /> */}
             </CardContent>
           </Card>
         </Grid>

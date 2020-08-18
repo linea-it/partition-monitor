@@ -97,6 +97,11 @@ const styles = makeStyles((theme) => ({
     color: 'black',
     textDecoration: 'none',
   },
+  invisibleLinkDisable: {
+    color: 'grey',
+    textDecoration: 'none',
+    pointerEvents: 'none',
+  },
   textDrawer: {
     color: 'white',
     fontWeight: 500,
@@ -126,7 +131,7 @@ const styles = makeStyles((theme) => ({
   },
   iconHomeOpen: {
     maxWidth: 65,
-    borderRadius: 65,
+    // borderRadius: 65,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeInOut,
       duration: theme.transitions.duration.enteringScreen,

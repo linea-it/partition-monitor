@@ -28,7 +28,7 @@ function GlobalVision({setTitle}) {
           title: server.server,
           values: [megabytesToTerabytesGraph(server.total_size - server.total_use) , megabytesToTerabytesGraph(server.total_use)],
           marker: {
-            colors: ['rgb(50,205,50)', 'rgb(175,0,0)']
+            colors: ['rgb(0,127,255)', 'rgb(255,158,0)']
           },
           labels: ['Free', 'Used'],
           type: 'pie',
