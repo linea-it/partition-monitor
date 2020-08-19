@@ -35,6 +35,8 @@ function Drawer({ title, children }) {
     fileserver: false,
   });
 
+  const handleDrawerDashboard = () => setOpen(!open);
+
   const handleDrawerClick = () => setOpen(!open);
 
   const handleDrawerTreeClick = (element) => setDrawerTree({
@@ -89,6 +91,19 @@ function Drawer({ title, children }) {
                   </>
                   )}
                 className={clsx(classes.homeBtn, classes.textDrawer)}
+              />
+            </ListItem>
+          </Link>
+          <Divider className={classes.borderDrawer} />
+          <Link to="/" className={classes.invisibleLink}>
+            <ListItem button >
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-th-large')} />
+              </ListItemIcon>
+              <ListItemText
+                primary="Dashboard"
+                title="Dashboard"
+                className={classes.textDrawer}
               />
             </ListItem>
           </Link>

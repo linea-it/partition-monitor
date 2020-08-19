@@ -10,7 +10,9 @@ import {
   FormControl,
   InputLabel,
   IconButton,
-  Button
+  Button,
+  Fade,
+  CircularProgress,
 } from '@material-ui/core';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
@@ -26,8 +28,11 @@ import {
 import { megabytesToSize, megabytesToTerabytesGraph, remainderPercentage } from '../../services/math';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import DucDialog from '../Duc/dialog';
+import styles from './styles';
 
 function Server({ setTitle }) {
+  const classes = styles();
+  const [loading, setLoading] = React.useState(true);
   const [period, setPeriod] = useState(1);
   const [plotDataDisk, setPlotDataDisk] = useState({ x: [], y: [] });
   const [plotData, setPlotData] = useState({ x: [], y: [] });
@@ -138,10 +143,17 @@ function Server({ setTitle }) {
   }
 
   useEffect(() => {
+    
+    setLoading(true);
+    setPartitions([]);
+    setPlotDataDisk({ x: [], y: [] });
+    setPlotData({ x: [], y: [] });
+
     setTitle(server);
     getServerHistoryByName(server).then(resServer => {
       let partitionAll = completeDatePartition(server, resServer.data[0]);
       getPartitionsByServer(server).then(res => {
+        setLoading(false);
         setSelectedPartition('all');        
         setPartitions([partitionAll].concat(res.map(function(row) {
           row.availablepercent = remainderPercentage(row.usepercent);
@@ -220,6 +232,16 @@ function Server({ setTitle }) {
 
   return (
     <>
+      <Fade
+          className={classes.spin}
+            in={loading}
+            style={{
+              transitionDelay: loading ? '800ms' : '0ms',
+            }}
+            unmountOnExit
+          >
+            <CircularProgress />
+      </Fade>
       <Grid container spacing={3} alignItems="stretch">
         <Grid item xs={6}>
           <Card style={{ height: '100%' }}>
