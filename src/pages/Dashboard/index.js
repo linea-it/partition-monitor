@@ -9,7 +9,7 @@ import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import styles from './styles';
 
-function GlobalVision({setTitle}) {
+function Dashboard({setTitle}) {
   const classes = styles();
   const [plotData, setPlotData] = useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -34,7 +34,7 @@ function GlobalVision({setTitle}) {
   }
 
   useEffect(() => {
-    setTitle('Global Vision');
+    setTitle('Dahsboard');
   }, [setTitle]);
 
   useEffect(() => {
@@ -88,8 +88,8 @@ function GlobalVision({setTitle}) {
   );
 }
 
-GlobalVision.propTypes = {
+Dashboard.propTypes = {
   setTitle: PropTypes.func.isRequired,
 };
 
-export default (GlobalVision);
+export default (Dashboard);
