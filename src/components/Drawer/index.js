@@ -25,7 +25,7 @@ import {
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Link } from 'react-router-dom';
 import styles from './styles';
-import logo from '../../assets/img/linea.png';
+import logo from '../../assets/img/logo.png';
 import Footer from '../Footer';
 
 function Drawer({ title, children }) {
@@ -93,6 +93,19 @@ function Drawer({ title, children }) {
             </ListItem>
           </Link>
           <Divider className={classes.borderDrawer} />
+          <Link to="/" className={classes.invisibleLink}>
+            <ListItem button >
+              <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-th-large')} />
+              </ListItemIcon>
+              <ListItemText
+                primary="Dashboard"
+                title="Dashboard"
+                className={classes.textDrawer}
+              />
+            </ListItem>
+          </Link>
+          <Divider className={classes.borderDrawer} />
           <ListItem button onClick={() => handleDrawerTreeClick('fileserver')}>
             {open ? (
               <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
@@ -133,6 +146,17 @@ function Drawer({ title, children }) {
                   />
                 </ListItem>
               </Link>
+              <Link disabled='true' to="/ms02" className={classes.invisibleLinkDisable} title="MS02">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="MS02"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
               <Link to="/ms04" className={classes.invisibleLink} title="MS04">
                 <ListItem button className={open ? classes.nested : ''}>
                   <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
@@ -144,7 +168,7 @@ function Drawer({ title, children }) {
                   />
                 </ListItem>
               </Link>
-              <Link to="/Ferocks" className={classes.invisibleLink} title="Ferocks">
+              {/* <Link to="/Ferocks" className={classes.invisibleLink} title="Ferocks">
                 <ListItem button className={open ? classes.nested : ''}>
                   <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
                     <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
@@ -154,7 +178,7 @@ function Drawer({ title, children }) {
                     className={classes.textDrawer}
                   />
                 </ListItem>
-              </Link>
+              </Link> */}
               <Link to="/Lustre" className={classes.invisibleLink} title="Lustre">
                 <ListItem button className={open ? classes.nested : ''}>
                   <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
@@ -162,6 +186,28 @@ function Drawer({ title, children }) {
                   </ListItemIcon>
                   <ListItemText
                     primary="Lustre"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+              <Link to="/ALTIX" className={classes.invisibleLink} title="ALTIX">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="ALTIX"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
+              <Link to="/Apollo" className={classes.invisibleLink} title="Apollo">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Apollo"
                     className={classes.textDrawer}
                   />
                 </ListItem>

@@ -41,6 +41,8 @@ const styles = makeStyles((theme) => ({
   },
   logoLink: {
     lineHeight: 0,
+    display: 'inline-block',
+    verticalAlign: 'middle',
   },
 }));
 

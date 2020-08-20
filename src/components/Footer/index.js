@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import { Typography, Toolbar } from '@material-ui/core';
 import clsx from 'clsx';
-import logo from '../../assets/img/linea-logo-mini.png';
+import logo from '../../assets/img/logo-mini.png';
 import gitVersion from '../../assets/json/version.json';
 import styles from './styles';
 

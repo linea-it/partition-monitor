@@ -11,13 +11,14 @@ import {
   InputLabel,
   IconButton,
   Button,
-  Divider 
+  Fade,
+  CircularProgress,
 } from '@material-ui/core';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import LinePlot from '../../components/Plot/LinePlot';
-import LinePlotDiff from '../../components/Plot/LinePlotDiff';
+// import LinePlotDiff from '../../components/Plot/LinePlotDiff';
 import Table from '../../components/Table';
 import {
   getServerHistoryByName,
@@ -27,8 +28,11 @@ import {
 import { megabytesToSize, megabytesToTerabytesGraph, remainderPercentage } from '../../services/math';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import DucDialog from '../Duc/dialog';
+import styles from './styles';
 
 function Server({ setTitle }) {
+  const classes = styles();
+  const [loading, setLoading] = React.useState(true);
   const [period, setPeriod] = useState(1);
   const [plotDataDisk, setPlotDataDisk] = useState({ x: [], y: [] });
   const [plotData, setPlotData] = useState({ x: [], y: [] });
@@ -40,19 +44,23 @@ function Server({ setTitle }) {
   const [dateRange, setDateRange] = useState([ null, null]);
 
   const rowDucGraph = (row) => {
-    return (
-      <IconButton 
-        color="inherit"
-        aria-label="Detailed version"
-        component="span"
-        onClick={()=>{
-          setOpen(true);
-          setCurrentPartition(row);
-        }}
-      >
-        <BarChartIcon />
-      </IconButton>
-    )
+    if (server !== 'desdb4' && server !== 'desdb6') {
+      return (
+        <IconButton
+          color="inherit"
+          aria-label="Detailed version"
+          component="span"
+          onClick={()=>{
+            setOpen(true);
+            setCurrentPartition(row);
+          }}
+        >
+          <BarChartIcon />
+        </IconButton>
+      )
+    } else {
+      return '-'
+    }
   }
 
   const mountpointCustom = (row) => {
@@ -116,6 +124,7 @@ function Server({ setTitle }) {
       customElement: row => rowDucGraph(row),
       width: '70px',
       sortingEnable: false,
+      align: 'center,'
     },
   ];
 
@@ -135,11 +144,18 @@ function Server({ setTitle }) {
   }
 
   useEffect(() => {
+
+    setLoading(true);
+    setPartitions([]);
+    setPlotDataDisk({ x: [], y: [] });
+    setPlotData({ x: [], y: [] });
+
     setTitle(server);
     getServerHistoryByName(server).then(resServer => {
       let partitionAll = completeDatePartition(server, resServer.data[0]);
       getPartitionsByServer(server).then(res => {
-        setSelectedPartition('all');        
+        setLoading(false);
+        setSelectedPartition('all');
         setPartitions([partitionAll].concat(res.map(function(row) {
           row.availablepercent = remainderPercentage(row.usepercent);
           return row;
@@ -161,7 +177,7 @@ function Server({ setTitle }) {
     } else {
       startDate = startDate.subtract(period, 'months').format('YYYY-MM-DD');
     }
-    setDateRange([ new Date(startDate), new Date(endDate) ]);    
+    setDateRange([ new Date(startDate), new Date(endDate) ]);
   },[period])
 
 
@@ -169,15 +185,15 @@ function Server({ setTitle }) {
     if (dateRange[0] && dateRange[1]) {
       const startDate = moment(dateRange[0]).format('YYYY-MM-DD');
       const endDate = moment(dateRange[1]).format('YYYY-MM-DD');
-  
+
       getHistoryByServerAndPartitionAndPeriod({
           server,
           partition: selectedPartition,
           startDate: startDate,
           endDate: endDate,
-        }).then(res => {   
+        }).then(res => {
           let xAxis = [];
-          let yAxis = []; 
+          let yAxis = [];
           res.data.forEach(row => {
             xAxis.push(row.date);
             yAxis.push(megabytesToTerabytesGraph(parseInt(row.total_use) || row.use));
@@ -200,9 +216,9 @@ function Server({ setTitle }) {
               const selectedPartitionSize = partitions.filter(p => p.mountpoint === selectedPartition)[0].size || 0;
               sizeDisk = megabytesToTerabytesGraph(parseInt(selectedPartitionSize))
             }
-            setPlotDataDisk({ 
+            setPlotDataDisk({
               x: [startDate,endDate],
-              y: [sizeDisk, sizeDisk], 
+              y: [sizeDisk, sizeDisk],
             });
         });
     }
@@ -217,6 +233,16 @@ function Server({ setTitle }) {
 
   return (
     <>
+      <Fade
+          className={classes.spin}
+            in={loading}
+            style={{
+              transitionDelay: loading ? '800ms' : '0ms',
+            }}
+            unmountOnExit
+          >
+            <CircularProgress />
+      </Fade>
       <Grid container spacing={3} alignItems="stretch">
         <Grid item xs={6}>
           <Card style={{ height: '100%' }}>
@@ -234,6 +260,10 @@ function Server({ setTitle }) {
                 totalCount={1}
                 remote={false}
                 hasSearching={false}
+                defaultSorting={[{
+                  columnName: 'mountpoint',
+                  direction: 'asc',
+                }]}
               />
             </CardContent>
           </Card>
@@ -266,12 +296,12 @@ function Server({ setTitle }) {
                 </Grid>
               </Grid>
               <LinePlot data={plotData} dataDisk={plotDataDisk} width={800} />
-              <Divider />
-              <LinePlotDiff data={plotData} width={800} />
+              {/* <Divider />
+              <LinePlotDiff data={plotData} width={800} /> */}
             </CardContent>
           </Card>
         </Grid>
-        
+
       </Grid>
       <DucDialog open={open} setOpen={setOpen} partition={currentPartition} />
     </>

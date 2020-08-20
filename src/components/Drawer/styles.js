@@ -97,6 +97,11 @@ const styles = makeStyles((theme) => ({
     color: 'black',
     textDecoration: 'none',
   },
+  invisibleLinkDisable: {
+    color: 'grey',
+    textDecoration: 'none',
+    pointerEvents: 'none',
+  },
   textDrawer: {
     color: 'white',
     fontWeight: 500,
@@ -114,7 +119,7 @@ const styles = makeStyles((theme) => ({
   },
   iconDrawer: {
     width: 'auto',
-    fontSize: '1.2em',
+    fontSize: '1.4rem',
   },
   expandClosed: {
     width: 'auto',
@@ -125,8 +130,8 @@ const styles = makeStyles((theme) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.32)',
   },
   iconHomeOpen: {
-    maxWidth: 65,
-    borderRadius: 65,
+    maxWidth: 140,
+    borderRadius: 140,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeInOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -134,7 +139,7 @@ const styles = makeStyles((theme) => ({
   },
   iconHomeClose: {
     maxWidth: 42,
-    marginLeft: -theme.spacing(1),
+    marginLeft: -8,
     borderRadius: 42,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeInOut,
