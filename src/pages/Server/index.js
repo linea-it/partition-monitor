@@ -44,9 +44,9 @@ function Server({ setTitle }) {
   const [dateRange, setDateRange] = useState([ null, null]);
 
   const rowDucGraph = (row) => {
-    if (server != 'desdb4' && server != 'desdb6') {
+    if (server !== 'desdb4' && server !== 'desdb6') {
       return (
-        <IconButton 
+        <IconButton
           color="inherit"
           aria-label="Detailed version"
           component="span"
@@ -124,6 +124,7 @@ function Server({ setTitle }) {
       customElement: row => rowDucGraph(row),
       width: '70px',
       sortingEnable: false,
+      align: 'center,'
     },
   ];
 
@@ -143,7 +144,7 @@ function Server({ setTitle }) {
   }
 
   useEffect(() => {
-    
+
     setLoading(true);
     setPartitions([]);
     setPlotDataDisk({ x: [], y: [] });
@@ -154,7 +155,7 @@ function Server({ setTitle }) {
       let partitionAll = completeDatePartition(server, resServer.data[0]);
       getPartitionsByServer(server).then(res => {
         setLoading(false);
-        setSelectedPartition('all');        
+        setSelectedPartition('all');
         setPartitions([partitionAll].concat(res.map(function(row) {
           row.availablepercent = remainderPercentage(row.usepercent);
           return row;
@@ -176,7 +177,7 @@ function Server({ setTitle }) {
     } else {
       startDate = startDate.subtract(period, 'months').format('YYYY-MM-DD');
     }
-    setDateRange([ new Date(startDate), new Date(endDate) ]);    
+    setDateRange([ new Date(startDate), new Date(endDate) ]);
   },[period])
 
 
@@ -184,15 +185,15 @@ function Server({ setTitle }) {
     if (dateRange[0] && dateRange[1]) {
       const startDate = moment(dateRange[0]).format('YYYY-MM-DD');
       const endDate = moment(dateRange[1]).format('YYYY-MM-DD');
-  
+
       getHistoryByServerAndPartitionAndPeriod({
           server,
           partition: selectedPartition,
           startDate: startDate,
           endDate: endDate,
-        }).then(res => {   
+        }).then(res => {
           let xAxis = [];
-          let yAxis = []; 
+          let yAxis = [];
           res.data.forEach(row => {
             xAxis.push(row.date);
             yAxis.push(megabytesToTerabytesGraph(parseInt(row.total_use) || row.use));
@@ -215,9 +216,9 @@ function Server({ setTitle }) {
               const selectedPartitionSize = partitions.filter(p => p.mountpoint === selectedPartition)[0].size || 0;
               sizeDisk = megabytesToTerabytesGraph(parseInt(selectedPartitionSize))
             }
-            setPlotDataDisk({ 
+            setPlotDataDisk({
               x: [startDate,endDate],
-              y: [sizeDisk, sizeDisk], 
+              y: [sizeDisk, sizeDisk],
             });
         });
     }
@@ -300,7 +301,7 @@ function Server({ setTitle }) {
             </CardContent>
           </Card>
         </Grid>
-        
+
       </Grid>
       <DucDialog open={open} setOpen={setOpen} partition={currentPartition} />
     </>

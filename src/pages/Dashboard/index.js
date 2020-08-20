@@ -5,16 +5,15 @@ import { getServerHistory } from '../../services/api';
 import Typography from '@material-ui/core/Typography';
 import { megabytesToSize, megabytesToTerabytesGraph } from '../../services/math';
 import PiePlot from '../../components/Plot/PiePlot';
-import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import styles from './styles';
 
 function Dashboard({setTitle}) {
   const classes = styles();
   const [plotData, setPlotData] = useState([]);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
-  function inserirNoArray (arr, server) {
+  function arrayInsert (arr, server) {
     let position = ['MS01','MS04','DESDB4','DESDB6','LUSTRE','FEROCKS','ALTIX','APOLLO'].indexOf(server.server.toUpperCase());
     arr[position] = {
       total: megabytesToSize(server.total_size),
@@ -23,7 +22,7 @@ function Dashboard({setTitle}) {
       title: server.server,
       values: [megabytesToTerabytesGraph(server.total_size - server.total_use) , megabytesToTerabytesGraph(server.total_use)],
       marker: {
-        colors: ['rgb(0,127,255)', 'rgb(255,63,0)']
+        colors: ['rgb(50,205,50)', 'rgb(175,0,0)']
       },
       labels: ['Free', 'Used'],
       type: 'pie',
@@ -34,7 +33,7 @@ function Dashboard({setTitle}) {
   }
 
   useEffect(() => {
-    setTitle('Dahsboard');
+    setTitle('Dashboard');
   }, [setTitle]);
 
   useEffect(() => {
@@ -47,44 +46,34 @@ function Dashboard({setTitle}) {
       // uniqueServerEntries.forEach (server, index => {
       //   console.log(server, index);
       // });
-      let ArrayOrganizado = [];
+      let orderedArray = [];
       uniqueServerEntries.forEach ( (server, index) => {
-        inserirNoArray(ArrayOrganizado, server);
+        arrayInsert(orderedArray, server);
         if (uniqueServerEntries.length === index + 1) {
-          setPlotData(prevState => ArrayOrganizado);
+          setPlotData(orderedArray);
         };
       });
+
+      setLoading(false);
     });
   }, []);
- 
-  return (
-    <>
-      <Fade
-        className={classes.spin}
-          in={loading}
-          style={{
-            transitionDelay: loading ? '800ms' : '0ms',
-          }}
-          unmountOnExit
-        >
-          <CircularProgress />
-      </Fade>
-      <Grid container spacing={3}>
-        {plotData.map((data) => (
-          <Grid item sm={12} md={6} xl={3} key={data.title}>
-            <Typography variant="subtitle1" gutterBottom className={classes.labelPieChart}>
-              {`Total: ${data.total}`}<br />
-              {`Used: ${data.used}`}<br />
-              {`Free: ${data.free}`}<br />
-            </Typography>
-            <PiePlot
-              data={[data]}
-              title={data.title}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </> 
+
+  return loading ? <CircularProgress className={classes.circularProgress} /> : (
+    <Grid container spacing={3}>
+      {plotData.map((data) => (
+        <Grid item sm={12} md={6} xl={3} key={data.title}>
+          <Typography variant="subtitle1" gutterBottom className={classes.labelPieChart}>
+            {`Total: ${data.total}`}<br />
+            {`Used: ${data.used}`}<br />
+            {`Free: ${data.free}`}<br />
+          </Typography>
+          <PiePlot
+            data={[data]}
+            title={data.title}
+          />
+        </Grid>
+      ))}
+    </Grid>
   );
 }
 

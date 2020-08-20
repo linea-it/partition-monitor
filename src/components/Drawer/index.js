@@ -25,7 +25,7 @@ import {
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Link } from 'react-router-dom';
 import styles from './styles';
-import logo from '../../assets/img/linea.png';
+import logo from '../../assets/img/logo.png';
 import Footer from '../Footer';
 
 function Drawer({ title, children }) {
@@ -34,8 +34,6 @@ function Drawer({ title, children }) {
     database: false,
     fileserver: false,
   });
-
-  const handleDrawerDashboard = () => setOpen(!open);
 
   const handleDrawerClick = () => setOpen(!open);
 

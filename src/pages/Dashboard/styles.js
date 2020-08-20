@@ -1,15 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const styles = makeStyles((theme) => ({
-  spin: {
-    left: '50%',
-    marginTop: '18%',
+  circularProgress: {
     position: 'absolute',
-    width: '40px',
-    height: '40px',
-    opacity: 1,
-    transition: 'opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 800ms',
-    zIindex: 5,
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 'auto',
+    zIndex: 1,
   },
   labelPieChart: {
     position: 'absolute',
