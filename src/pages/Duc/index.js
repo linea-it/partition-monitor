@@ -6,7 +6,7 @@ function Duc({ partition }) {
     <div>
       <iframe
         title="duc.cgi"
-        src={`https://devel6.linea.gov.br/cgi-bin/${partition.server}/duc.cgi?cmd=index&path=${partition.mountpoint === '/home' ? '/mnt/devhome' : partition.mountpoint}`}
+        src={`https://devel6.linea.gov.br/cgi-bin/${partition}/duc.cgi?cmd=index&path=/archive`}
         width="100%"
         height="950px"
         frameBorder="0"
@@ -16,7 +16,7 @@ function Duc({ partition }) {
 }
 
 Duc.propTypes = {
-  partition: PropTypes.object.isRequired,
+  partition: PropTypes.string.isRequired,
 }
 
 export default Duc;
