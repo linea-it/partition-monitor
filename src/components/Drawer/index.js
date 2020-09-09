@@ -84,7 +84,7 @@ function Drawer({ title, children }) {
                       <img src={logo} alt="Monitor" className={clsx(open ? classes.iconHomeOpen : classes.iconHomeClose)} />
                     </ListItemIcon>
                     <span className={clsx(classes.homeDrawer, open ? classes.titleBlock : '')}>
-                      Partition Monitor
+                      Storage Monitor
                     </span>
                   </>
                   )}
@@ -146,7 +146,7 @@ function Drawer({ title, children }) {
                   />
                 </ListItem>
               </Link>
-              <Link disabled='true' to="/ms02" className={classes.invisibleLinkDisable} title="MS02">
+              <Link to="/ms02" className={classes.invisibleLink} title="MS02">
                 <ListItem button className={open ? classes.nested : ''}>
                   <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
                     <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />

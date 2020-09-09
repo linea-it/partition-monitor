@@ -7,7 +7,7 @@ export default function RouteWrapper({
   component: Component,
   ...rest
 }) {
-  const [title, setTitle] = useState('Partition Monitor');
+  const [title, setTitle] = useState('Storage Monitor');
 
   return (
     <Route
