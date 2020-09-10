@@ -138,8 +138,8 @@ function Server({ setTitle }) {
       available: 0,
       use: 0,
     }
-    partitions.map((partition, index) =>{
-      console.log(partition); 
+    partitions.forEach((partition, index) =>{
+
       all.size += parseInt(partition.size);
       all.use += parseInt(partition.use);
       if (partitions.length === index+1) {
@@ -147,7 +147,6 @@ function Server({ setTitle }) {
         let usepercent = (all.use/all.size * 100).toFixed(0) +'%';
         all.usepercent = usepercent;
         all.availablepercent = remainderPercentage(usepercent);
-        console.log(all);
       }
     })
     return all;
@@ -305,7 +304,7 @@ function Server({ setTitle }) {
               </Grid>
               <LinePlot data={plotData} dataDisk={plotDataDisk} width={800} />
               { server.toUpperCase().includes('MS0') ? (
-                <Button variant="contained" color="primary" onClick={() => {           
+                <Button variant="contained" color="primary" onClick={() => {
                   setOpen(true);
                   setCurrentPartition(server);
                 }}>
