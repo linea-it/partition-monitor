@@ -25,7 +25,7 @@ function DucDialog({ open, setOpen, partition }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {`${partition.server}${partition.mountpoint}`}
+          {partition}
           <CloseModal setOpen={setOpen} />
         </DialogTitle>
         <DialogContent>
@@ -47,7 +47,7 @@ function DucDialog({ open, setOpen, partition }) {
 DucDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  partition: PropTypes.object.isRequired,
+  partition: PropTypes.string.isRequired,
 }
 
 export default DucDialog;

@@ -15,6 +15,7 @@ const styles = makeStyles((theme) => ({
     zIndex: 2,
     marginLeft: '280px',
     marginTop: '10px',
+    fontSize: '14px',
   },
 }));
 

@@ -7,10 +7,10 @@ function PiePlot({ title, width, height, data }) {
     <Plotly
       data={data}
       layout= {{
+        showlegend: false,
         title: title,
         height: height,
         width: 400,
-        showlegend: false,
         margin: {
           l: 0,
           t: 0,

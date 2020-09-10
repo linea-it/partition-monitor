@@ -43,9 +43,6 @@ function Dashboard({setTitle}) {
         arr.map(mapObj => mapObj.server)
         .indexOf(obj.server) === pos
       )
-      // uniqueServerEntries.forEach (server, index => {
-      //   console.log(server, index);
-      // });
       let orderedArray = [];
       uniqueServerEntries.forEach ( (server, index) => {
         arrayInsert(orderedArray, server);

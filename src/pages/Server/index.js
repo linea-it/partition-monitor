@@ -40,7 +40,7 @@ function Server({ setTitle }) {
   const [selectedPartition, setSelectedPartition] = useState('all');
   const { server } = useParams();
   const [open, setOpen] = useState(false);
-  const [currentPartition, setCurrentPartition] = useState({ server: '', mountpoint: '' });
+  const [currentPartition, setCurrentPartition] = useState('');
   const [dateRange, setDateRange] = useState([ null, null]);
 
   const rowDucGraph = (row) => {
@@ -80,13 +80,13 @@ function Server({ setTitle }) {
     {
       name: 'description',
       title: 'Description',
-      width: '180px',
+      width: '200px',
     },
     {
       name: 'mountpoint',
       title: 'Mountpoint',
       customElement: row => mountpointCustom(row),
-      width: '150px',
+      width: '200px',
     },
     {
       name: 'size',
@@ -118,49 +118,56 @@ function Server({ setTitle }) {
       align: 'center',
       width: '70px',
     },
-    {
-      name: 'server',
-      title: 'Detailed version',
-      customElement: row => rowDucGraph(row),
-      width: '70px',
-      sortingEnable: false,
-      align: 'center,'
-    },
+    // {
+    //   name: 'server',
+    //   title: 'Detailed version',
+    //   customElement: row => rowDucGraph(row),
+    //   width: '70px',
+    //   sortingEnable: false,
+    //   align: 'center,'
+    // },
   ];
 
-  const completeDatePartition = (serverName, partition) => {
-    let usepercent = (partition.total_use/partition.total_size * 100).toFixed(0) +'%'
-    return {
+  const completeDatePartition = (serverName, partitions) => {
+    let all = {
       description: serverName,
       mountpoint: 'all',
       filesystem: serverName,
       server: serverName,
-      size: partition.total_size,
-      available: partition.total_size - partition.total_use,
-      use: partition.total_use,
-      usepercent: usepercent,
-      availablepercent: remainderPercentage(usepercent),
+      size: 0,
+      available: 0,
+      use: 0,
     }
+    partitions.forEach((partition, index) =>{
+
+      all.size += parseInt(partition.size);
+      all.use += parseInt(partition.use);
+      if (partitions.length === index+1) {
+        all.available = all.size - all.use;
+        let usepercent = (all.use/all.size * 100).toFixed(0) +'%';
+        all.usepercent = usepercent;
+        all.availablepercent = remainderPercentage(usepercent);
+      }
+    })
+    return all;
   }
 
   useEffect(() => {
-
     setLoading(true);
     setPartitions([]);
     setPlotDataDisk({ x: [], y: [] });
     setPlotData({ x: [], y: [] });
 
     setTitle(server);
-    getServerHistoryByName(server).then(resServer => {
-      let partitionAll = completeDatePartition(server, resServer.data[0]);
-      getPartitionsByServer(server).then(res => {
-        setLoading(false);
-        setSelectedPartition('all');
-        setPartitions([partitionAll].concat(res.map(function(row) {
-          row.availablepercent = remainderPercentage(row.usepercent);
-          return row;
-        })));
-      });
+    getPartitionsByServer(server).then(res => {
+      let partitionAll = completeDatePartition(server, res);
+      setLoading(false);
+      setSelectedPartition('all');
+      console.log(partitionAll);
+      setPartitions([partitionAll].concat(res.map(function(row) {
+        row.availablepercent = remainderPercentage(row.usepercent);
+        return row;
+      })));
     });
     setPeriod(1);
   }, [server, setTitle]);
@@ -296,8 +303,13 @@ function Server({ setTitle }) {
                 </Grid>
               </Grid>
               <LinePlot data={plotData} dataDisk={plotDataDisk} width={800} />
-              {/* <Divider />
-              <LinePlotDiff data={plotData} width={800} /> */}
+              { server.toUpperCase().includes('MS0') ? (
+                <Button variant="contained" color="primary" onClick={() => {
+                  setOpen(true);
+                  setCurrentPartition(server);
+                }}>
+                Detailed Vision
+              </Button> ) : "" }
             </CardContent>
           </Card>
         </Grid>
