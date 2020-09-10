@@ -13,7 +13,7 @@ export const getServerHistory = () => {
   return axios
     .get(`/server_history?&date__range=${startDate},${endDate}`)
     .then(res => {
-      
+
       return res.data
     });
 }
@@ -24,7 +24,7 @@ export const getHistoryByServerAndPartitionAndPeriod = ({
   startDate,
   endDate,
 }) => {
-  const filter = partition === 'all' ? 
+  const filter = partition === 'all' ?
   {
     partition: '',
     api_base: 'server_history',
@@ -41,17 +41,6 @@ export const getHistoryByServerAndPartitionAndPeriod = ({
     .then(res => res.data);
 };
 
-export const getServerHistory = () => {
-  const startDate = formatDate(new Date().setDate(new Date().getDate() - 31));
-  const endDate = formatDate(new Date());
-  return axios
-    .get(`/server_history?&date__range=${startDate},${endDate}`)
-    .then(res => {
-      
-      return res.data
-    });
-}
-
 export const getServerHistoryByName = (name) =>
   axios
     .get(`/server_history?server__eq=${name}`)
@@ -63,9 +52,9 @@ const formatDate = (date) => {
       day = '' + d.getDate(),
       year = d.getFullYear();
 
-  if (month.length < 2) 
+  if (month.length < 2)
       month = '0' + month;
-  if (day.length < 2) 
+  if (day.length < 2)
       day = '0' + day;
 
   return [year, month, day].join('-');
