@@ -14,7 +14,7 @@ function Dashboard({setTitle}) {
   const [loading, setLoading] = useState(true);
 
   function arrayInsert (arr, server) {
-    let position = ['MS01','MS04','DESDB4','DESDB6','LUSTRE','FEROCKS','ALTIX','APOLLO'].indexOf(server.server.toUpperCase());
+    let position = ['MS01', 'MS02', 'MS04','DESDB4','DESDB6','LUSTRE','FEROCKS','ALTIX','APOLLO', 'DTS'].indexOf(server.server.toUpperCase());
     arr[position] = {
       total: megabytesToSize(server.total_size),
       used: megabytesToSize(server.total_use),
