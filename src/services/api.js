@@ -1,8 +1,17 @@
 import axios from 'axios';
 
-export const url = process.env.REACT_APP_API;
-axios.defaults.baseURL = url;
-const jobs= [];
+const host = process.env.REACT_APP_API || `${window.location.protocol}//${window.location.hostname}${
+  window.location.port ? ':' : ''
+}${window.location.port}`;
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.baseURL = `${host}`;
+
+console.log('host', host)
+console.log('process.env.REACT_APP_API', process.env.REACT_APP_API)
+console.log('axios.defaults.baseURL', axios.defaults.baseURL)
+
 
 export const getPartitionsByServer = server =>
   axios.get(`/last?server__eq=${server}`).then(res => res.data.data);
