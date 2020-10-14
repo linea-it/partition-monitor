@@ -6,7 +6,7 @@ const host = process.env.REACT_APP_API || `${window.location.protocol}//${window
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.baseURL = `${host}`;
+axios.defaults.baseURL = host;
 
 export const getPartitionsByServer = server =>
   axios.get(`/last?server__eq=${server}`).then(res => res.data.data);
