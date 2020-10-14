@@ -58,7 +58,7 @@ function Dashboard({setTitle}) {
   return loading ? <CircularProgress className={classes.circularProgress} /> : (
     <Grid container spacing={3}>
       {plotData.map((data) => (
-        <Grid item sm={12} md={6} xl={3} key={data.title}>
+        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={data.title}>
           <Typography variant="subtitle1" gutterBottom className={classes.labelPieChart}>
             {`Total: ${data.total}`}<br />
             {`Used: ${data.used}`}<br />
