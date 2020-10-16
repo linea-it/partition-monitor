@@ -38,7 +38,7 @@ function Dashboard({setTitle}) {
 
   useEffect(() => {
     getServerHistory().then(res => {
-      // Get unique array of objects by a specific property:
+      // Get unique array of objects by a specific property
       const uniqueServerEntries = res.data.filter((obj, pos, arr) =>
         arr.map(mapObj => mapObj.server)
         .indexOf(obj.server) === pos
