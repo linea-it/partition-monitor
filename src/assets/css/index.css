@@ -20,3 +20,7 @@ code {
 .svg-container .main-svg {
   background: transparent !important;
 }
+
+.svg-container {
+  height: 220px!important;
+}
