@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import Plotly from 'react-plotly.js';
 
 function PiePlot({ title, width, height, data }) {
+  console.log(data);
   return (
     <Plotly
-      data={data}
+      data={[data.dataTotal, data.dataPie]}
       layout= {{
-        showlegend: false,
+        showlegend: true,
         title: title,
         height: height,
         width: 400,
@@ -15,7 +16,16 @@ function PiePlot({ title, width, height, data }) {
           l: 0,
           t: 0,
           pad: 0
-        }
+        },
+        annotations: [
+          {
+            font: {
+              size: 15
+            },
+            showarrow: false,
+            text: title ,
+          },
+        ]
       }}
   />
   )

@@ -12,7 +12,7 @@ export const getPartitionsByServer = server =>
   axios.get(`/last?server__eq=${server}`).then(res => res.data.data);
 
 export const getServerHistory = () => {
-  const startDate = formatDate(new Date().setDate(new Date().getDate() - 31));
+  const startDate = formatDate(new Date().setDate(new Date().getDate() - 60));
   const endDate = formatDate(new Date());
   return axios
     .get(`/server_history?&date__range=${startDate},${endDate}`)
