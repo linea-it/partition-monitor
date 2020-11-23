@@ -212,6 +212,17 @@ function Drawer({ title, children }) {
                   />
                 </ListItem>
               </Link>
+              <Link to="/DTS" className={classes.invisibleLink} title="DTS">
+                <ListItem button className={open ? classes.nested : ''}>
+                  <ListItemIcon className={clsx(classes.ListIconDrawer, open ? classes.ListIconDrawerOpen : '')}>
+                    <Icon className={clsx(classes.iconDrawer, 'fa', 'fa-archive')} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="DTS"
+                    className={classes.textDrawer}
+                  />
+                </ListItem>
+              </Link>
             </List>
           </Collapse>
           <Divider className={classes.borderDrawer} />
