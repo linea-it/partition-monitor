@@ -17,9 +17,6 @@ const styles = makeStyles((theme) => ({
     marginTop: '10px',
     fontSize: '14px',
   },
-  height: {
-    height: '265px',
-  }
 }));
 
 export default styles;

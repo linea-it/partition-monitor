@@ -74,7 +74,7 @@ function Dashboard({setTitle}) {
         <Grid item md={12} lg={6} xl={4} key={data.title}>
           <Card className={classes.root}>
             <CardHeader title={'Server - ' + data.title} />
-            <CardContent className={classes.height}>
+            <CardContent>
               <PiePlot
                 data={data}
                 title={data.title}
