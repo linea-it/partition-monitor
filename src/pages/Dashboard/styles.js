@@ -17,8 +17,8 @@ const styles = makeStyles((theme) => ({
     marginTop: '10px',
     fontSize: '14px',
   },
-  heigth: {
-    heigth: '265px',
+  height: {
+    height: '265px',
   }
 }));
 
