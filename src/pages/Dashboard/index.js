@@ -71,7 +71,7 @@ function Dashboard({setTitle}) {
   return loading ? <CircularProgress className={classes.circularProgress} /> : (
     <Grid container spacing={3}>
       {plotData.map((data) => (
-        <Grid item xs={12} sm={6} xl={4} key={data.title}>
+        <Grid item md={12} lg={6} xl={4} key={data.title}>
           <Card className={classes.root}>
             <CardHeader title={'Server - ' + data.title} />
             <CardContent>

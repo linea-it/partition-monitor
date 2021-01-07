@@ -16,11 +16,3 @@ code {
 .plot-container.plotly {
   max-width: 100%;
 }
-
-/* .svg-container .main-svg {
-  background-color: transparent !important;
-} */
-
-.svg-container {
-  max-height: 220px;
-}
