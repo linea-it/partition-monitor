@@ -10,11 +10,13 @@ function PiePlot({ title, width, height, data }) {
       layout= {{
         showlegend: true,
         title: title,
-        height: height,
+        height: 230,
         width: 400,
         margin: {
           l: 0,
           t: 0,
+          b: 0,
+          r: 0,
           pad: 0
         },
         annotations: [
